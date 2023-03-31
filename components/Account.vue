@@ -66,28 +66,30 @@ async function signOut() {
     <Avatar v-model:path="avatar_path" @upload="updateProfile" />
     <div>
       <label for="email">Email</label>
-      <input id="email" type="text" :value="user.email" disabled />
+      <v-text-field variant="outlined" id="email" type="text" :value="user.email" disabled />
     </div>
     <div>
       <label for="username">Name</label>
-      <input id="username" type="text" v-model="username" />
+      <v-text-field variant="outlined" id="username" type="text" v-model="username" />
     </div>
     <div>
       <label for="website">Website</label>
-      <input id="website" type="website" v-model="website" />
+      <v-text-field varinat="outlined" id="website" type="website" v-model="website" />
     </div>
 
     <div>
-      <input
+      <v-btn
         type="submit"
         class="button primary block"
-        :value="loading ? 'Loading ...' : 'Update'"
+        variant="outlined"
         :disabled="loading"
-      />
+      >
+        {{ loading ? 'Loading ...' : 'Update' }}
+      </v-btn>
     </div>
 
     <div>
-      <button class="button block" @click="signOut" :disabled="loading">Sign Out</button>
+      <v-btn variant="outlined" class="button block" @click="signOut" :disabled="loading">Sign Out</v-btn>
     </div>
   </form>
 </template>

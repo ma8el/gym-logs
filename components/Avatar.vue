@@ -71,14 +71,16 @@ watch(path, () => {
       <label class="button primary block" for="single">
         {{ uploading ? 'Uploading ...' : 'Upload' }}
       </label>
-      <input
+      <v-btn
         style="position: absolute; visibility: hidden;"
+        varinat="outlined"
         type="file"
         id="single"
         accept="image/*"
         @change="uploadAvatar"
         :disabled="uploading"
-      />
+      >
+      </v-btn>
     </div>
   </div>
 </template>

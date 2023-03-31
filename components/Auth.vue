@@ -24,15 +24,17 @@ const handleLogin = async () => {
       <h1 class="header">Supabase + Nuxt 3</h1>
       <p class="description">Sign in via magic link with your email below</p>
       <div>
-        <input class="inputField" type="email" placeholder="Your email" v-model="email" />
+        <v-text-field variant="outlined" class="inputField" type="email" placeholder="Your email" v-model="email" />
       </div>
       <div>
-        <input
+        <v-btn
+          variant="outlined"
           type="submit"
           class="button block"
-          :value="loading ? 'Loading' : 'Send magic link'"
           :disabled="loading"
-        />
+        >
+        {{ loading ? 'Loading' : 'Send magic link' }}
+        </v-btn>
       </div>
     </div>
   </form>
