@@ -79,19 +79,18 @@ async function signOut() {
       </div>
   
       <div>
-        <v-btn
+        <input
           type="submit"
           class="button primary block"
-          variant="outlined"
+          :value="loading ? 'Loading ...' : 'Update'"
           :disabled="loading"
-        >
-          {{ loading ? 'Loading ...' : 'Update' }}
-        </v-btn>
+        />
       </div>
-  
+
       <div>
-        <v-btn variant="outlined" class="button block" @click="signOut" :disabled="loading">Sign Out</v-btn>
+        <button class="button block" @click="signOut" :disabled="loading">Sign Out</button>
       </div>
+
     </form>
   </NuxtLayout>
 </template>

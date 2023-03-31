@@ -65,22 +65,20 @@ watch(path, () => {
       class="avatar image"
       style="width: 10em; height: 10em;"
     />
-    <div v-else class="avatar no-image" :style="{ height: size, width: size }" />
+    <div v-else class="avatar no-image"/>
 
     <div style="width: 10em; position: relative;">
       <label class="button primary block" for="single">
         {{ uploading ? 'Uploading ...' : 'Upload' }}
       </label>
-      <v-btn
+      <input
         style="position: absolute; visibility: hidden;"
-        varinat="outlined"
         type="file"
         id="single"
         accept="image/*"
         @change="uploadAvatar"
         :disabled="uploading"
-      >
-      </v-btn>
+      />
     </div>
   </div>
 </template>
