@@ -62,34 +62,36 @@ async function signOut() {
 </script>
 
 <template>
-  <form class="form-widget" @submit.prevent="updateProfile">
-    <Avatar v-model:path="avatar_path" @upload="updateProfile" />
-    <div>
-      <label for="email">Email</label>
-      <v-text-field variant="outlined" id="email" type="text" :value="user.email" disabled />
-    </div>
-    <div>
-      <label for="username">Name</label>
-      <v-text-field variant="outlined" id="username" type="text" v-model="username" />
-    </div>
-    <div>
-      <label for="website">Website</label>
-      <v-text-field varinat="outlined" id="website" type="website" v-model="website" />
-    </div>
-
-    <div>
-      <v-btn
-        type="submit"
-        class="button primary block"
-        variant="outlined"
-        :disabled="loading"
-      >
-        {{ loading ? 'Loading ...' : 'Update' }}
-      </v-btn>
-    </div>
-
-    <div>
-      <v-btn variant="outlined" class="button block" @click="signOut" :disabled="loading">Sign Out</v-btn>
-    </div>
-  </form>
+  <NuxtLayout>
+    <form  @submit.prevent="updateProfile">
+      <Avatar v-model:path="avatar_path" @upload="updateProfile" />
+      <div>
+        <label for="email">Email</label>
+        <v-text-field variant="outlined" id="email" type="text" :value="user.email" disabled />
+      </div>
+      <div>
+        <label for="username">Name</label>
+        <v-text-field variant="outlined" id="username" type="text" v-model="username" />
+      </div>
+      <div>
+        <label for="website">Website</label>
+        <v-text-field varinat="outlined" id="website" type="website" v-model="website" />
+      </div>
+  
+      <div>
+        <v-btn
+          type="submit"
+          class="button primary block"
+          variant="outlined"
+          :disabled="loading"
+        >
+          {{ loading ? 'Loading ...' : 'Update' }}
+        </v-btn>
+      </div>
+  
+      <div>
+        <v-btn variant="outlined" class="button block" @click="signOut" :disabled="loading">Sign Out</v-btn>
+      </div>
+    </form>
+  </NuxtLayout>
 </template>
