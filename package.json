@@ -3,13 +3,14 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt --hostname localhost dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
     "@nuxtjs/supabase": "^0.3.1",
-    "nuxt": "^3.3.2"
+    "nuxt": "^3.3.2",
+    "typescript": "^5.0.3"
   }
 }
