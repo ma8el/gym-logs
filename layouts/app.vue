@@ -15,7 +15,7 @@
     .single()
   
   if (data) {
-    username.value = data.username
+    username.value = data.username ? data.username : "User"
     avatar_path.value = data.avatar_url
   }
   
