@@ -21,7 +21,6 @@ const handleLogin = async () => {
 <template>
   <form class="row flex-center flex" @submit.prevent="handleLogin">
     <div class="col-6 form-widget login">
-      <img src="../assets/logo.png" class="logo"/>
       <h1 class="header">Performance Health</h1>
       <p class="description">Sign in via magic link with your email below</p>
       <div>
@@ -40,14 +39,8 @@ const handleLogin = async () => {
 </template>
 
 <style scoped>
-.logo {
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-  height: 50%;
-}
-
 .login {
   text-align: center;
+  padding: 2em;
 }
 </style>
