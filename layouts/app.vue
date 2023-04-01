@@ -89,19 +89,8 @@
  .user-settings {
     margin-bottom: 5px;
  }
- v-card {
-   height: 100%;
- }
  .link {
    text-decoration: none;
    color: #000;
  }
-
- nuxt-link-active {
-  font-weight: bold;
-}
- nuxt-link-exact-active {
-  background: red;
- }
-
 </style>
