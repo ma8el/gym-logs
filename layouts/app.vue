@@ -36,7 +36,7 @@
 
 <template>
       <v-layout>
-        <v-app-bar title="Performance Health">
+        <v-app-bar title="MomentumFit">
           <template v-slot:prepend>
             <v-avatar>
               <img src="../assets/logo.png" width="40" height="40"/>

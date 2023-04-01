@@ -21,7 +21,7 @@ const handleLogin = async () => {
 <template>
   <form class="row flex-center flex" @submit.prevent="handleLogin">
     <div class="col-6 form-widget login">
-      <h1 class="header">Performance Health</h1>
+      <h1 class="header">MomentumFit</h1>
       <p class="description">Sign in via magic link with your email below</p>
       <div>
         <v-text-field variant="outlined" class="inputField" type="email" placeholder="Your email" v-model="email" />
