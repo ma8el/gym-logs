@@ -31,7 +31,9 @@
 
 <style scoped>
 .fc {
-  max-width: 900px;
+  min-width: 500px;
+  min-height: 500px;
+  height: 80vh;
 }
 
 </style>

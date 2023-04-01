@@ -1,5 +1,5 @@
 <template>
-    <NuxtLayout>
-        <Account />
-    </NuxtLayout>
+  <NuxtLayout name="app">
+    <Account />
+  </NuxtLayout> 
 </template>

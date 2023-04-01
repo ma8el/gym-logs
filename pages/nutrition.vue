@@ -1,5 +1,5 @@
 <template>
-    <NuxtLayout>
-      <h1>Nutrition</h1>
-    </NuxtLayout>
+  <NuxtLayout name="app">
+    <h1>Nutrition</h1>
+  </NuxtLayout>
 </template>

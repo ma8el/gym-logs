@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout>
+  <NuxtLayout name="app">
     <h1>Calendar</h1>
     <div class="calendar">
       <Calendar />
@@ -9,8 +9,7 @@
 
 <style scoped>
 .calendar {
-  width: 100%;
-  height: 100%;
-
+  width: 100hv;
+  height: auto;
 }
 </style>
