@@ -16,8 +16,8 @@
               <NuxtLink to="/workout" class="link">
                   <v-list-item prepend-icon="mdi-weight-kilogram" title="Workout" nav></v-list-item>
               </NuxtLink>
-              <NuxtLink to="/calender" class="link">
-                  <v-list-item prepend-icon="mdi-calendar" title="Calender" nav></v-list-item>
+              <NuxtLink to="/calendar" class="link">
+                  <v-list-item prepend-icon="mdi-calendar" title="Calendar" nav></v-list-item>
               </NuxtLink>
               <NuxtLink to="/user" class="link">
                   <v-list-item prepend-icon="mdi-account" title="User Settings" nav></v-list-item>
