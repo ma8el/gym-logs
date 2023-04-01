@@ -48,17 +48,7 @@ async function updateProfile() {
   }
 }
 
-async function signOut() {
-  try {
-    loading.value = true
-    let { error } = await supabase.auth.signOut()
-    if (error) throw error
-  } catch (error) {
-    alert(error.message)
-  } finally {
-    loading.value = false
-  }
-}
+
 </script>
 
 <template>
@@ -85,10 +75,5 @@ async function signOut() {
         :disabled="loading"
       />
     </div>
-
-    <div>
-      <button class="button block" @click="signOut" :disabled="loading">Sign Out</button>
-    </div>
-
   </form>
 </template>
