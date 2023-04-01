@@ -16,7 +16,13 @@
               <NuxtLink to="/workout" class="link">
                   <v-list-item prepend-icon="mdi-weight-kilogram" title="Workout" nav></v-list-item>
               </NuxtLink>
-              <NuxtLink to="/calendar" class="link">
+               <NuxtLink to="/exercises" class="link">
+                  <v-list-item prepend-icon="mdi-weight-kilogram" title="Exercises" nav></v-list-item>
+              </NuxtLink>
+                <NuxtLink to="/nutrition" class="link">
+                  <v-list-item prepend-icon="mdi-nutrition" title="Nutrition" nav></v-list-item>
+              </NuxtLink>
+           <NuxtLink to="/calendar" class="link">
                   <v-list-item prepend-icon="mdi-calendar" title="Calendar" nav></v-list-item>
               </NuxtLink>
               <NuxtLink to="/user" class="link">
