@@ -1,22 +1,4 @@
 <script setup lang="ts">
-  interface Performance {
-    id: number,
-    at: Date,
-    squat: number,
-    bench: number,
-    deadlift: number,
-    overhead: number,
-  }
-  interface UserStatistics {
-    id: number
-    at: Date,
-    weight: number,
-    height: number,
-    age: number,
-    gender: string,
-    performance: Performance
-  }
-
   const loading = ref(false)
   const userStatistics = ref<UserStatistics>({
       id: 0,

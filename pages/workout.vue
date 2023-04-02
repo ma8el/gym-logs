@@ -1,57 +1,38 @@
 <script setup lang="ts">
-  interface Muscle {
-    id: number,
-    name: string,
-    description: string,
-    bodyPart: string,
-  }
-
-  interface Exercise {
-    id: number,
-    name: string,
-    description: string,
-    usedMuscles: Muscle[],
-    neuronalFatigueFactor: number,
-    muscleFatigueFactor: number,
-  }
-
-  interface WorkoutExercise {
-    id: number,
-    exercise: Exercise,
-    sets: number,
-    reps: number,
-    weight: number,
-    restTime: number,
-    estimatedFatigue: number,
-  }
-
-  interface Workout {
-    id: number,
-    name: string,
-    description: string,
-    exercises: WorkoutExercise[]
-    estimatedTime: number,
-  }
-
-  interface WorkoutSession {
-    id: number,
-    at: Date,
-    workout: Workout
-    notes: string,
-  }
-
-  interface WorkoutRoutine {
-    id: number,
-    name: string,
-    description: string,
-    sessions: WorkoutSession[]
-  }
-
+ const dialog = ref(false)
 </script>
 
 
 <template>
   <NuxtLayout name="app">
-    <h1>Workouts</h1>
+    <v-row>
+      <v-col>
+        <h1>Workouts</h1>
+      </v-col>
+      <v-spacer></v-spacer>
+      <v-col justify="end">
+        <v-dialog
+          v-model="dialog"
+          width="800"
+        >
+          <template v-slot:activator="{ props }">
+            <v-btn
+              class="primary"
+              v-bind="props"
+            >
+              Add workout
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-title>
+              <span class="text-h5">Create you workout</span>
+            </v-card-title>
+            <v-card-text>
+              <WorkoutForm/>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+      </v-col>
+    </v-row>
   </NuxtLayout> 
 </template>

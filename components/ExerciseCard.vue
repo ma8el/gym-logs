@@ -1,21 +1,4 @@
 <script setup lang="ts">
-  interface Muscle {
-    id: number,
-    name: string,
-  }
-
-  interface Exercise {
-    uuid?: string,
-    name?: string,
-    description?: string,
-    muscles?: Muscle[],
-    category?: {id: number, name: string},
-    image?: string,
-    language?: string,
-    creation_date?: string,
-//    author?: string,
-  }
-
   const props = defineProps(['exercise'])
   const exercise = props.exercise
 
