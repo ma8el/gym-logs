@@ -52,28 +52,32 @@ async function updateProfile() {
 </script>
 
 <template>
-  <form  @submit.prevent="updateProfile">
-    <Avatar v-model:path="avatar_path" @upload="updateProfile" />
-    <div>
-      <label for="email">Email</label>
-      <v-text-field variant="outlined" id="email" type="text" :value="user.email" disabled />
-    </div>
-    <div>
-      <label for="username">Name</label>
-      <v-text-field variant="outlined" id="username" type="text" v-model="username" />
-    </div>
-    <div>
-      <label for="website">Website</label>
-      <v-text-field varinat="outlined" id="website" type="website" v-model="website" />
-    </div>
+  <div class="container">
+    <form  @submit.prevent="updateProfile">
+      <div>
+        <Avatar v-model:path="avatar_path" @upload="updateProfile" />
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <v-text-field variant="outlined" id="email" type="text" :value="user.email" disabled />
+      </div>
+      <div>
+        <label for="username">Name</label>
+        <v-text-field variant="outlined" id="username" type="text" v-model="username" />
+      </div>
+      <div>
+        <label for="website">Website</label>
+        <v-text-field variant="outlined" id="website" type="website" v-model="website" />
+      </div>
   
-    <div>
-      <input
-        type="submit"
-        class="button primary block"
-        :value="loading ? 'Loading ...' : 'Update'"
-        :disabled="loading"
-      />
-    </div>
-  </form>
+      <div>
+        <input
+          type="submit"
+          class="button primary block"
+          :value="loading ? 'Loading ...' : 'Update'"
+          :disabled="loading"
+        />
+      </div>
+    </form>
+  </div>
 </template>
