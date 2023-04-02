@@ -49,7 +49,7 @@
                   <v-list-item prepend-icon="mdi-chart-box" title="Dashboard" nav></v-list-item>
               </NuxtLink>
               <NuxtLink to="/workout" class="link">
-                  <v-list-item prepend-icon="mdi-weight-kilogram" title="Workout" nav></v-list-item>
+                  <v-list-item prepend-icon="mdi-weight-kilogram" title="Workouts" nav></v-list-item>
               </NuxtLink>
                <NuxtLink to="/exercises" class="link">
                   <v-list-item prepend-icon="mdi-grid" title="Exercises" nav></v-list-item>
