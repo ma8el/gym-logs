@@ -1,9 +1,14 @@
 <script setup lang="ts">
+  interface Muscle {
+    id: number,
+    name: string,
+  }
+
   interface Exercise {
     uuid?: string,
     name?: string,
     description?: string,
-    muscles?: [{id: string, name: string}],
+    muscles?: Muscle[],
     category?: {id: number, name: string},
     image?: string,
     language?: string,
@@ -16,10 +21,23 @@
 
   const exerciseUUID = exercise.uuid ? exercise.uuid : 1
   const exerciseName = exercise.name ? exercise.name : 'No name set'
+
   const exerciseDescription = exercise.description ? exercise.description : 'No description'
-  const exerciseMuscles = exercise.muscles ? exercise.muscles : ['No muscles']
+  
+  let exerciseMuscles = [{id: 0, name: 'No muscles defined'}]
+  if (exercise.muscles.length != 0) {
+    exerciseMuscles = exercise.muscles
+  } 
+
   const exerciseCategory = exercise.category ? exercise.category : {id: 0, name: 'No category defined'}
-  const exerciseImage = exercise.images[0].image
+
+  let exerciseImage = undefined
+  if (exercise.images.length != 0) {
+    if (exercise.images[0].image) {
+      exerciseImage = exercise.images[0].image
+    }
+  }
+
   const exerciseLanguage = exercise.language.full_name ? exercise.language.full_name : 'No language set'
   const exerciseCreationDate = exercise.creation_date ? exercise.creation_date : 'No creation date set'
 
