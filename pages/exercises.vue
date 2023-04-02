@@ -25,7 +25,7 @@
     <NuxtLayout name="app">
       <h1>Exercises</h1>
       <v-row v-if="exerciseResponse">
-        <v-col cols="auto" v-for="exercise in exerciseResponse" :key="exercise.id">
+        <v-col cols="3" v-for="exercise in exerciseResponse" :key="exercise.id">
           <ExerciseCard :exercise="exercise" />
         </v-col>
       </v-row>
