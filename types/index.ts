@@ -16,12 +16,13 @@ interface Exercise {
 
 interface WorkoutExercise {
   id: number,
-  exercise: Exercise,
-  sets: number,
-  reps: number,
-  weight: number,
-  restTime: number,
-  estimatedFatigue: number,
+  exerciseID?: number,
+  sets?: number,
+  reps?: number,
+  weight?: number,
+  rir?: number,
+  restTime?: number,
+  estimatedFatigue?: number,
 }
 
 interface Workout {

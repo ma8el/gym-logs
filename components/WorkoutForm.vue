@@ -1,36 +1,39 @@
 <script setup lang="ts"> 
   import { useField, useForm } from 'vee-validate'
+
   const { handleSubmit, handleReset } = useForm({
     validationSchema: {
-      name (value) {
+      name (value: string) {
         if (value?.length >= 2) return true
         return 'Name needs to be at least 2 characters.'
       },
-      description (value) {
+      description (value: string) {
         if (value?.length > 9) return true
         return 'Phone number needs to be at least 9 characters.'
-      },
-      exercise (value) {
-            if (value) return true
-            return 'Select an item.'
       },
     },
   })
 
-  const name = useField('name')
-  const description = useField('description')
-  const exercise = useField('exercise')
-  
-  const exercises = ref([
-    'Squat',
-    'Bench',
-    'Deadlift',
-    'Overhead',
-  ])
-
   const submit = handleSubmit(values => {
         alert(JSON.stringify(values, null, 2))
   })
+
+  const name = useField('name')
+  const description = useField('description')
+
+  const exercises = ref<WorkoutExercise[]>([])
+  const exerciseCounter = ref(0)
+
+  const addExercise = () => {
+    exercises.value.push({
+      id: exerciseCounter.value++,
+    })
+  }
+
+  const closeExerciseForm = (id: number) => {
+    exercises.value = exercises.value.filter(exercise => exercise.id !== id)
+  }
+  
 </script>
 
 <template>
@@ -48,23 +51,32 @@
       :error-messages="description.errorMessage.value"
       label="Description"
     ></v-text-field>
+    <v-row>
+      <v-col cols="3">
+        <v-btn @click="addExercise()">
+          add exercise
+        </v-btn>
+      </v-col>
+    </v-row>
+      <div v-for="exercise in exercises" :key="exercise.id">
+        <WorkoutExerciseForm :id="exercise.id" @close-form="closeExerciseForm"/>
+        <v-spacer></v-spacer>
+      </div>
 
-    <v-select
-      v-model="exercise.value.value"
-      :items="exercises"
-      :error-messages="exercise.errorMessage.value"
-      label="exercise"
-    ></v-select>
-
-    <v-btn
-      class="me-4"
-      type="submit"
-    >
-      submit
-    </v-btn>
-
-    <v-btn @click="handleReset">
-      clear
-    </v-btn>
+    <v-row>
+      <v-col cols="2">
+        <v-btn
+          class="me-4"
+          type="submit"
+        >
+          submit
+        </v-btn>
+      </v-col>
+      <v-col cols="2">
+        <v-btn @click="handleReset">
+          clear
+        </v-btn>
+      </v-col>
+    </v-row>
   </form>
 </template>
