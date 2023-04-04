@@ -1,26 +1,21 @@
 <script setup lang="ts">
-  import { useField, useForm } from 'vee-validate'
-  const { handleSubmit, handleReset } = useForm({
+import { useField, useForm } from 'vee-validate'
+  const { validate, handleReset } = useForm({
     validationSchema: {
       sets (value: string) {
-        if (parseInt(value) > 0 && /[0-9-]+/.test(value)) return true
-        return 'Create at least one set.'
+        return isInteger(value)
       },
       reps (value: string) {
-        if (parseInt(value) > 0 && /[0-9-]+/.test(value)) return true
-        return 'Lift something.'
+        return isInteger(value)
       },
       weight (value: string) {
-        if (parseInt(value) > 0 && /[0-9-]+/.test(value)) return true
-        return 'Lift something.'
+        return isInteger(value)
       },
       rir (value: string) {
-        if (/[0-9-]+/.test(value)) return true
-        return 'RIR must be a number.'
+        return isInteger(value)
       },
       restTime (value: string) {
-        if (/[0-9-]+/.test(value)) return true
-        return 'Rest time must be a number.'
+        return isInteger(value)
       },
       exercise (value: string) {
         if (value) return true
@@ -45,11 +40,24 @@
 
   const props = defineProps(['id'])
 
-  const emit = defineEmits(['closeForm'])
+  const emit = defineEmits(['closeForm', 'exerciseFormFilled'])
   const emitClose = () => {
     emit('closeForm', props.id)
   }
 
+  watch([exercise.value, sets.value, reps.value, weight.value, rir.value, restTime.value], () => {
+    validate().then(() => {
+      emit('exerciseFormFilled', {
+        id: props.id,
+        exercise: exercise.value.value,
+        sets: sets.value.value,
+        reps: reps.value.value,
+        weight: weight.value.value,
+        rir: rir.value.value,
+        restTime: restTime.value.value,
+      })
+    })
+  })
 </script>
 
 <template>
@@ -75,13 +83,16 @@
           :items="exercises"
           :error-messages="exercise.errorMessage.value"
           label="Exercise"
+          required
         ></v-select>
       </v-col>
       <v-col cols="3">
         <v-text-field
           v-model="restTime.value.value"
           :error-messages="restTime.errorMessage.value"
-          label="Rest Time (s)"
+          label="Rest Time"
+          suffix="s"
+          required
         ></v-text-field>
       </v-col>
     </v-row>
@@ -91,6 +102,7 @@
           v-model="sets.value.value"
           :error-messages="sets.errorMessage.value"
           label="Sets"
+          required
         ></v-text-field>
       </v-col>
       <v-col cols="1">
@@ -101,6 +113,7 @@
           v-model="reps.value.value"
           :error-messages="reps.errorMessage.value"
           label="Repetitions"
+          required
         ></v-text-field>
       </v-col>
 
@@ -108,7 +121,9 @@
         <v-text-field
           v-model="weight.value.value"
           :error-messages="weight.errorMessage.value"
-          label="Weight (kg)"
+          label="Weight"
+          suffix="kg"
+          required
         ></v-text-field>
       </v-col>
 

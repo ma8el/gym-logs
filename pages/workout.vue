@@ -23,14 +23,7 @@
               Add workout
             </v-btn>
           </template>
-          <v-card>
-            <v-card-title>
-              <span class="text-h5">Create you workout</span>
-            </v-card-title>
-            <v-card-text>
-              <WorkoutForm/>
-            </v-card-text>
-          </v-card>
+          <WorkoutForm/>
         </v-dialog>
       </v-col>
     </v-row>
