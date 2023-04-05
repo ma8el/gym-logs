@@ -77,7 +77,7 @@
           </v-navigation-drawer>
           <v-main>
             <v-container
-            class="d-flex flex-column"
+            class="d-flex flex-column app-container"
             style="min-height: 300px;">
                <slot />
             </v-container>
@@ -92,5 +92,8 @@
  .link {
    text-decoration: none;
    color: #000;
+ }
+ .app-container {
+   padding: 1rem 2rem 0 2rem;
  }
 </style>
