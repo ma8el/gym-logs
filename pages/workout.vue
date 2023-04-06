@@ -27,7 +27,7 @@
         </v-dialog>
       </v-col>
     </v-row>
-    <WorkoutsExpansionPanel/>
+    <WorkoutsTabs/>
   </NuxtLayout> 
 </template>
 
