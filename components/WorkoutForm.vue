@@ -6,8 +6,10 @@
   const { handleSubmit, handleReset } = useForm({
     validationSchema: {
       name (value: string) {
-        if (value?.length >= 2) return true
-        return 'Name needs to be at least 2 characters.'
+        return minLength(2)(value)
+      },
+      description (value: string) {
+        return maxLength(100)(value)
       },
     },
   })
@@ -36,17 +38,16 @@
       <span class="text-h5">Create your workout</span>
     </v-card-title>
     <v-card-text>
-      <form @submit.prevent="submit">
+      <v-form fast-fail @submit.prevent="submit">
       <v-text-field
         v-model="name.value.value"
-        :counter="2"
         :error-messages="name.errorMessage.value"
         label="Name"
       ></v-text-field>
 
       <v-text-field
         v-model="description.value.value"
-        :counter="9"
+        :counter="100"
         :error-messages="description.errorMessage.value"
         label="Description"
       ></v-text-field>
@@ -66,7 +67,7 @@
         </v-btn>
         </v-col>
       </v-row>
-      </form>
+      </v-form>
     </v-card-text>
   </v-card>
 </template>
