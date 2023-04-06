@@ -6,10 +6,13 @@
   const { handleSubmit, handleReset } = useForm({
     validationSchema: {
       name (value: string) {
-        return minLength(2)(value)
+        if (value?.length >= 2 && value?.length <= 30) { return true }
+        return 'Name needs to be at least 2 characters and at most 30 characters.'
+
       },
       description (value: string) {
-        return maxLength(100)(value)
+        if (value?.length <= 100 || !value) { return true }
+        return 'Description can be at most 100 characters.'
       },
     },
   })
@@ -26,7 +29,7 @@
         updated_at: new Date(),
         user_id: user.value.id,
         name: values.name,
-        description: values.description,
+        description: values.description? values.description : 'No description',
       })
     emit('closeWorkoutForm')
   })
@@ -41,6 +44,7 @@
       <v-form fast-fail @submit.prevent="submit">
       <v-text-field
         v-model="name.value.value"
+        :counter="30"
         :error-messages="name.errorMessage.value"
         label="Name"
       ></v-text-field>
