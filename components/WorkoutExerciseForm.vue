@@ -36,24 +36,11 @@ const supabase = useSupabaseClient()
 
   const props = defineProps(['id'])
 
-  const emit = defineEmits(['closeForm', 'exerciseFormFilled'])
+  const emit = defineEmits(['closeForm'])
   const emitClose = () => {
     emit('closeForm', props.id)
   }
 
-  watch([exercise.value, sets.value, reps.value, weight.value, rir.value, restTime.value], () => {
-    validate().then(() => {
-      emit('exerciseFormFilled', {
-        id: props.id,
-        exercise: exercise.value.value,
-        sets: sets.value.value,
-        reps: reps.value.value,
-        weight: weight.value.value,
-        rir: rir.value.value,
-        restTime: restTime.value.value,
-      })
-    })
-  })
   onMounted (async () => {
     const { data } = await supabase.from('exercises').select('name')
     exercises.value = data?.map((exercise: any) => exercise.name)
