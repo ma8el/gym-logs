@@ -1,0 +1,3 @@
+ALTER TABLE workout_exercises ALTER COLUMN sets DROP NOT NULL;
+ALTER TABLE workout_exercises ALTER COLUMN reps DROP NOT NULL;
+ALTER TABLE workout_exercises ALTER COLUMN weight DROP NOT NULL;
