@@ -1,4 +1,12 @@
 <script setup lang="ts">
+  interface Workout {
+    id: number
+    name: string
+    description: string
+    created_at: string
+    updated_at: string
+  }
+
   const supabase = useSupabaseClient()
   const workoutsTable = 'workouts'
   
@@ -7,6 +15,8 @@
   const workouts = ref()
 
   const deletionDialog = ref(false)
+  const showModify = ref(true)
+  const readonly = ref(true)
 
   const tab = ref('')
   
@@ -24,7 +34,6 @@
       .select(`id, name, description, created_at, updated_at`)
       .then(({ data, error }) => {
         if (error) {
-          console.log('error', error)
         } else {
           workouts.value = data
         }
@@ -37,7 +46,6 @@
       .delete()
       .eq('id', workoutId)
     if (error) {
-      console.log('error', error)
     } else {
       deletionDialog.value = false
       loadWorkouts()
@@ -55,6 +63,22 @@
       },
       () => loadWorkouts()
     )
+
+    const handleModify = async (workout: Workout) => {
+      if (showModify.value) {
+        readonly.value = false
+      } else {
+        readonly.value = true
+        await supabase
+          .from(workoutsTable)
+          .update({ 
+            description: workout.description,
+            updated_at: new Date()
+          })
+          .eq('id', workout.id)
+      }
+      showModify.value = !showModify.value
+    }
 
   onMounted(async () => {
     loadWorkouts()
@@ -90,7 +114,7 @@
         <v-window-item :value="workout.name">
           <v-card flat>
             <v-toolbar density="compact" color="orange">
-              <v-toolbar-title></v-toolbar-title>
+              <v-toolbar-title>{{ workout.name }}</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn
                 icon="$delete"
@@ -111,17 +135,25 @@
             <v-card-text>
               <v-row>
                 <v-col cols="8">
-                  <b>Description:</b> {{ workout.description }}
+                  <v-text-field
+                    v-model="workout.description"
+                    :append-icon="showModify? 'mdi-pencil': 'mdi-check'"
+                    label="description"
+                    counter="100"
+                    :readonly="readonly"
+                    @click:append="handleModify(workout)"
+                  >
+                  </v-text-field>
                 </v-col>
                 <v-spacer></v-spacer>
                 <v-col cols="4">
-                  <b>Created at:</b> {{ new Date(workout.created_at).toLocaleString('en-US', {timeZone: 'UTC'}) }}
+                  <v-row class="pt-2 mb-2">
+                    <b>Created at:</b> {{ new Date(workout.created_at).toLocaleString('en-US', {timeZone: 'UTC'}) }}
+                  </v-row>
+                  <v-row>
+                    <b>Last modified:</b> {{ new Date(workout.updated_at).toLocaleString('en-US', {timeZone: 'UTC'}) }}
+                  </v-row>
                 </v-col>
-              <v-row justify="end">
-                <v-col cols="4">
-                  <b>Last modified:</b> {{ new Date(workout.updated_at).toLocaleString('en-US', {timeZone: 'UTC'}) }}
-                </v-col>
-              </v-row>
               </v-row>
               <v-row>
                 <v-col cols="3">
