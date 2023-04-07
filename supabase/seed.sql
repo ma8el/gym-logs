@@ -8,5 +8,5 @@ insert into workouts (id, user_id, name, description)
 insert into exercises (id, name, description)
  values (0, 'test exercise', 'test description');
 
-insert into workout_exercises (id, workout_id, exercise_id)
- values (0, 0, 0);
+insert into workout_exercises (id, workout_id, exercise_id, user_id)
+ values (0, 0, 0, (select id from profiles));
