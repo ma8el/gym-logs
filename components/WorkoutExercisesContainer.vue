@@ -2,18 +2,51 @@
   const props = defineProps<{
     workoutId: number
   }>()
+  const supabase = useSupabaseClient()
+  const workoutExercisesTable = 'workout_exercises'
 
-  const exerciseIDs = ref<number[]>([])
-  const exerciseID = ref(0)
+  const workoutExercises = ref()
 
-  const closeExerciseForm = (id: number) => {
-    exerciseIDs.value = exerciseIDs.value.filter(exerciseID => exerciseID !== id)
+  const loadWorkoutExercises = () => {
+    supabase
+      .from(workoutExercisesTable)
+      .select(`id, workout_id, exercise_id, sets, reps, weight, resttime, rir, created_at, updated_at, valid`)
+      .eq('workout_id', props.workoutId)
+      .then(({ data, error }) => {
+        if (error) {
+          console.log(error)
+        } else {
+          workoutExercises.value = data
+          console.log(workoutExercises.value)
+        }
+      })
   }
-  
-  const addExercise = () => {
-    exerciseIDs.value.push(exerciseID.value++)
+
+  const deleteWorkoutExercise = async (id: number) => {
+    await supabase
+      .from(workoutExercisesTable)
+      .delete()
+      .eq('id', id)
+    loadWorkoutExercises()
+  }
+ 
+  const addExercise = async () => {
+    const user = useSupabaseUser()
+    await supabase
+    .from(workoutExercisesTable)
+    .insert(
+      {
+        workout_id: props.workoutId,
+        exercise_id: 1,
+        user_id: user.value.id
+      },
+    )
+    loadWorkoutExercises()
   }
 
+  onMounted(() => {
+    loadWorkoutExercises()
+  })
 </script>
 
 <template>
@@ -24,8 +57,8 @@
       </v-btn>
     </v-col>
   </v-row>
-  <div v-for="exerciseID in exerciseIDs" :key="exerciseID">
-    <WorkoutExerciseForm :id="exerciseID" @close-form="closeExerciseForm"/>
+  <div v-for="workoutExercise in workoutExercises" :key="workoutExercise.id">
+    <WorkoutExerciseForm :id="workoutExercise.id" @close-form="deleteWorkoutExercise"/>
     <v-spacer></v-spacer>
   </div>
 </template>

@@ -36,9 +36,9 @@ const supabase = useSupabaseClient()
 
   const props = defineProps(['id'])
 
-  const emit = defineEmits(['closeForm'])
-  const emitClose = () => {
-    emit('closeForm', props.id)
+  const emit = defineEmits(['deleteWorkoutExercies'])
+  const emitDelete = () => {
+    emit('deleteWorkoutExercies', props.id)
   }
 
   onMounted (async () => {
@@ -58,7 +58,7 @@ const supabase = useSupabaseClient()
       size="small"
       variant="text"
       class="ma-2"
-      @click="emitClose"
+      @click="emitDelete"
     ></v-btn>
   </v-toolbar>
   <form>

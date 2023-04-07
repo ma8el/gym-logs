@@ -43,13 +43,13 @@
   }
 
   const channel = supabase
-    .channel('table-db-changes')
+    .channel('workouts-changes')
     .on(
       'postgres_changes',
       {
         event: '*',
         schema: 'public',
-        table: workoutsTable,
+        table: workoutsTable
       },
       () => loadWorkouts()
     )
