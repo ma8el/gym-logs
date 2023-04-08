@@ -2,15 +2,13 @@
  const dialog = ref(false)
 </script>
 
-
 <template>
   <NuxtLayout name="app">
-    <v-row class="header-row">
-      <v-col cols="8">
+    <NuxtLayout name="planner">
+      <template #header>
         <h1>Workouts</h1>
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-col justify="end">
+      </template>
+      <template #form>
         <v-dialog
           v-model="dialog"
           width="800"
@@ -25,16 +23,10 @@
           </template>
           <WorkoutForm @close-workout-form="dialog = false"/>
         </v-dialog>
-      </v-col>
-    </v-row>
-    <WorkoutsTabs/>
+      </template>
+      <template #tabs>
+        <WorkoutsTabs/>
+      </template>
+    </NuxtLayout>
   </NuxtLayout> 
 </template>
-
-<style scoped>
-.header-row {
-  flex: 0 0 auto;
-  margin-bottom: 1rem;
-}
-
-</style>
