@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useField, useForm } from 'vee-validate'
-const supabase = useSupabaseClient()
+  import { useField, useForm } from 'vee-validate'
+  const supabase = useSupabaseClient()
 
   const { validate, handleReset } = useForm({
     validationSchema: {
@@ -19,56 +19,127 @@ const supabase = useSupabaseClient()
       restTime (value: string) {
         return isInteger(value)
       },
-      exercise (value: string) {
-        if (value) return true
-        return 'Select an item.'
-      },
     },
   })
 
-  const exercises = ref()
-  const exercise = useField('exercise')
+  const exercises = ref([{}])
+  const exercise = ref()
   const sets = useField('sets')
   const reps = useField('reps')
   const weight = useField('weight')
   const rir = useField('rir')
   const restTime = useField('restTime')
 
-  const props = defineProps(['id'])
+  const isValidWorkoutExercise = ref(false)
+  const modify = ref(false)
+
+  const props = defineProps(['workoutExerciseId'])
 
   const emit = defineEmits(['deleteWorkoutExercies'])
   const emitDelete = () => {
-    emit('deleteWorkoutExercies', props.id)
+    emit('deleteWorkoutExercies', props.workoutExerciseId)
+  }
+
+  const loadWorkoutExercise = async () => {
+    const { data, error } = await supabase
+      .from('workout_exercises')
+      .select(`id, exercise_id, sets, reps, weight, resttime, rir, created_at, updated_at, valid`)
+      .eq('id', props.workoutExerciseId)
+    if (data) {
+      exercise.value = data[0].exercise_id
+      sets.value.value = data[0].sets
+      reps.value.value = data[0].reps
+      weight.value.value = data[0].weight
+      rir.value.value = data[0].rir
+      restTime.value.value = data[0].resttime
+      isValidWorkoutExercise.value = data[0].valid
+    }
+    if (error) {
+      console.log('error', error)
+    }
+  }
+
+  const save = async () => {
+    const isValid = await validate()
+    if (!isValid.valid) {
+      return
+    }
+    if (!isValid) return
+    const { error } = await supabase
+      .from('workout_exercises')
+      .update([
+        {
+          exercise_id: exercise.value,
+          sets: sets.value.value,
+          reps: reps.value.value,
+          weight: weight.value.value,
+          rir: rir.value.value,
+          resttime: restTime.value.value,
+        },
+      ])
+      .eq('id', props.workoutExerciseId)
+
+    if (error) {
+      console.log('error', error)
+      return
+    }
+    loadWorkoutExercise()
+    modify.value = false
   }
 
   onMounted (async () => {
-    const { data } = await supabase.from('exercises').select('name')
-    exercises.value = data?.map((exercise: any) => exercise.name)
-  })
+    const { data } = await supabase.from('exercises').select(`id, name`)
+    exercises.value = data?.map((exercise: any) => ({title: exercise.name, value: exercise.id}))
+    loadWorkoutExercise()
+ })
 </script>
 
 <template>
 <v-card class="exercise-form-card">
   <v-toolbar density="compact" color="orange">
-    <v-toolbar-title v-if="exercise.value.value">{{ exercise.value.value }}</v-toolbar-title>
-    <v-toolbar-title v-else>{{ `Exercise #${id}` }}</v-toolbar-title>
+    <v-toolbar-title v-if="exercise">{{ exercises.filter((e) => (e.value === exercise))[0].title }}</v-toolbar-title>
+    <v-toolbar-title v-if="isValidWorkoutExercise">{{ `${sets.value.value} x ${reps.value.value}` }}</v-toolbar-title>
     <v-spacer></v-spacer>
+    <div v-if="!isValidWorkoutExercise">
+      <v-tooltip
+        start
+        text="There are fields missing or invalid"
+      >
+      <template v-slot:activator="{ props }">
+        <v-btn
+          icon
+          v-bind="props"
+          class="circle-exclamation"
+        >
+        <v-icon>
+          mdi-alert-circle
+        </v-icon>
+        </v-btn>
+      </template>
+      </v-tooltip>
+    </div>
     <v-btn
-      icon="$close"
+      icon="mdi-pencil"
       size="small"
       variant="text"
       class="ma-2"
-      @click="emitDelete"
+      @click="modify = !modify"
+    ></v-btn>
+    <v-btn
+      icon="$delete"
+      size="small"
+      variant="text"
+      class="ma-2"
+      @click="emitDelete()"
     ></v-btn>
   </v-toolbar>
-  <form>
-    <div class="form-components">
+  <form v-if="!isValidWorkoutExercise || modify">
+    <div class="form-components" >
     <v-row>
       <v-col cols="9">
         <v-select
-          v-model="exercise.value.value"
+          v-model="exercise"
           :items="exercises"
-          :error-messages="exercise.errorMessage.value"
           label="Exercise"
           required
         ></v-select>
@@ -122,6 +193,15 @@ const supabase = useSupabaseClient()
         ></v-text-field>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col cols="2">
+        <v-btn
+        @click="save"
+        >
+          Save
+        </v-btn>
+      </v-col>
+    </v-row>
     </div>
   </form>
 </v-card>
@@ -140,5 +220,10 @@ const supabase = useSupabaseClient()
 }
 .form-components {
   margin: 1rem 1rem 1rem 1rem;
+}
+
+.circle-exclamation {
+  margin-right: 2rem;
+  border-radius: 50%;
 }
 </style>

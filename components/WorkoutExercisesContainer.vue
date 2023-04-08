@@ -17,7 +17,6 @@
           console.log(error)
         } else {
           workoutExercises.value = data
-          console.log(workoutExercises.value)
         }
       })
   }
@@ -58,7 +57,7 @@
     </v-col>
   </v-row>
   <div v-for="workoutExercise in workoutExercises" :key="workoutExercise.id">
-    <WorkoutExerciseForm :id="workoutExercise.id" @close-form="deleteWorkoutExercise"/>
+    <WorkoutExerciseForm :workoutExerciseId="workoutExercise.id" @delete-workout-exercies="deleteWorkoutExercise"/>
     <v-spacer></v-spacer>
   </div>
 </template>
