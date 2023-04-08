@@ -27,7 +27,7 @@
       </template>
       <template #tabs>
         <PlannerTabs :source-table="sourceTable" v-slot="slotProps">
-            <p>Plan {{ slotProps.itemId }}</p>
+            <WorkoutPlansContainer :workoutPlanId = "slotProps.itemId"/>
         </PlannerTabs>
       </template>
     </NuxtLayout>
