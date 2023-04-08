@@ -25,7 +25,6 @@
       .eq('id', itemId)
     if (error) {
     } else {
-      console.log(itemId)
       deletionDialog.value = false
     }
   }

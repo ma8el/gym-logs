@@ -35,7 +35,6 @@
 
   onMounted(() => {
     loadWorkoutExercises(props.workoutId).then((data) => {
-      console.log(data)
       workoutExercises.value = data
     })
   })
