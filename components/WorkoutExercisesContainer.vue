@@ -7,26 +7,14 @@
 
   const workoutExercises = ref()
 
-  const loadWorkoutExercises = () => {
-    supabase
-      .from(workoutExercisesTable)
-      .select(`id, workout_id, exercise_id, sets, reps, weight, resttime, rir, created_at, updated_at, valid`)
-      .eq('workout_id', props.workoutId)
-      .then(({ data, error }) => {
-        if (error) {
-          console.log(error)
-        } else {
-          workoutExercises.value = data
-        }
-      })
-  }
-
   const deleteWorkoutExercise = async (id: number) => {
     await supabase
       .from(workoutExercisesTable)
       .delete()
       .eq('id', id)
-    loadWorkoutExercises()
+    loadWorkoutExercises(props.workoutId).then((data) => {
+      workoutExercises.value = data
+    })
   }
  
   const addExercise = async () => {
@@ -40,11 +28,16 @@
         user_id: user.value.id
       },
     )
-    loadWorkoutExercises()
+   loadWorkoutExercises(props.workoutId).then((data) => {
+     workoutExercises.value = data
+    })
   }
 
   onMounted(() => {
-    loadWorkoutExercises()
+    loadWorkoutExercises(props.workoutId).then((data) => {
+      console.log(data)
+      workoutExercises.value = data
+    })
   })
 </script>
 

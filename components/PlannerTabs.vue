@@ -18,18 +18,6 @@
 
   const tab = ref('')
   
-  const loadItems = async () => {
-    await supabase
-      .from(props.sourceTable)
-      .select(`id, name, description, created_at, updated_at`)
-      .then(({ data, error }) => {
-        if (error) {
-        } else {
-          items.value = data
-        }
-      })
-  }
-
   const deleteItem = async (itemId: number) => {
     const { error } = await supabase
       .from(props.sourceTable)
@@ -37,6 +25,7 @@
       .eq('id', itemId)
     if (error) {
     } else {
+      console.log(itemId)
       deletionDialog.value = false
     }
   }
@@ -58,11 +47,15 @@
   }
 
   onMounted(async () => {
-    loadItems()
+    loadItems(props.sourceTable).then(data => {
+      items.value = data
+    })
   })
 
   onUpdated(async () => {
-    loadItems()
+    loadItems(props.sourceTable).then(data => {
+      items.value = data
+    })
   })
 </script>
 
