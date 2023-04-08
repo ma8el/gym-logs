@@ -1,5 +1,6 @@
 <script setup lang="ts">
  const dialog = ref(false)
+ const sourceTable = 'workouts'
 </script>
 
 <template>
@@ -25,7 +26,9 @@
         </v-dialog>
       </template>
       <template #tabs>
-        <WorkoutsTabs/>
+        <PlannerTabs :source-table="sourceTable" v-slot="slotProps">
+            <WorkoutExercisesContainer :workoutId="slotProps.itemId"/>
+        </PlannerTabs>
       </template>
     </NuxtLayout>
   </NuxtLayout> 

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  const emit = defineEmits(['close-workout-form', 'delete-workout'])
+  const emit = defineEmits(['close-form', 'delete-item'])
 
   const emitClose = () => {
-    emit('close-workout-form')
+    emit('close-form')
   }
 
   const emitDelete = () => {
-    emit('delete-workout')
+    emit('delete-item')
   }
 </script>
 
