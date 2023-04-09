@@ -40,7 +40,6 @@
   })
 
   onMounted(() => {
-    console.log(plannedWorkoutStore.plannedWorkouts)
     workoutChannel.subscribe()
     workoutExerciseChannel.subscribe()
   })
