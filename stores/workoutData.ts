@@ -87,8 +87,8 @@ export const usePlannedWorkoutsStore = defineStore('plannedWorkouts', {
     }),
 
     actions: {
-        async fetchData(workoutPlanId: number) {
-            loadPlannedWorkouts(workoutPlanId).then((data) => {
+        async fetchData() {
+            loadPlannedWorkouts().then((data) => {
                 this.plannedWorkouts = data?.map((plannedWorkout) => (
                     {
                         id: plannedWorkout.id,

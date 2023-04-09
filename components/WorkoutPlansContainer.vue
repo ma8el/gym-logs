@@ -6,6 +6,8 @@
   const plannedWorkoutsTable = 'planned_workouts'
   const workoutsTable = 'workouts'
 
+  const plannedWorkoutStore = usePlannedWorkoutsStore()
+
   const workouts = ref()
   const plannedWorkouts = ref()
 
@@ -20,34 +22,27 @@
             user_id: userStore.user
             },
         )
-      loadPlannedWorkouts(props.workoutPlanId).then((data) => {
-      plannedWorkouts.value = data
-      })
   }
 
-  const deletePlannedWorkout = async (id: number) => {
-    await supabase
-      .from(plannedWorkoutsTable)
-      .delete()
-      .eq('id', id)
-    loadPlannedWorkouts(props.workoutPlanId).then((data) => {
-      plannedWorkouts.value = data
-    })
+  const updatePlannedWorkouts = async (store) => {
+    if(store.plannedWorkouts) {
+      plannedWorkouts.value = store.plannedWorkouts
+        .filter((plannedWorkout: any) => 
+          plannedWorkout.workout_plan_id === props.workoutPlanId)
+    } else {
+      plannedWorkouts.value = undefined
+    }
   }
 
   onMounted(() => {
-    loadPlannedWorkouts(props.workoutPlanId).then((data) => {
-      plannedWorkouts.value = data
-    })
+    updatePlannedWorkouts(plannedWorkoutStore)
     loadItems(workoutsTable).then((data) => {
       workouts.value = data
     })
   })
 
-  onUpdated(() => {
-    loadPlannedWorkouts(props.workoutPlanId).then((data) => {
-      plannedWorkouts.value = data
-    })
+  watch(plannedWorkoutStore, (newVal) => {
+    updatePlannedWorkouts(newVal)
   })
 </script>
 

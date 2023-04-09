@@ -1,6 +1,54 @@
 <script setup lang="ts">
- const dialog = ref(false)
- const sourceTable = 'workout_plans'
+  const supabase = useSupabaseClient()
+  const dialog = ref(false)
+  const sourceTable = 'workout_plans'
+
+  const workoutPlanStore = useWorkoutPlansStore()
+  const workoutStore = useWorkoutsStore()
+  const plannedWorkoutStore = usePlannedWorkoutsStore()
+  const daysOfWeekStore = useDaysOfWeekStore()
+
+  const workoutChannel = supabase
+    .channel('workout-plans-table-change')
+    .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'workout_plans',
+        },
+        () => workoutPlanStore.fetchData()
+  )
+
+  const workoutExerciseChannel = supabase
+    .channel('planned-workouts-table-change')
+    .on(
+        'postgres_changes',
+        {
+            event: '*',
+            schema: 'public',
+            table: 'planned_workouts',
+        },
+        () => plannedWorkoutStore.fetchData()
+  )
+
+  onBeforeMount(() => {
+    workoutPlanStore.fetchData()
+    workoutStore.fetchData()
+    plannedWorkoutStore.fetchData()
+    daysOfWeekStore.fetchData()
+  })
+
+  onMounted(() => {
+    console.log(plannedWorkoutStore.plannedWorkouts)
+    workoutChannel.subscribe()
+    workoutExerciseChannel.subscribe()
+  })
+
+  onUnmounted(() => {
+    workoutChannel.unsubscribe()
+    workoutExerciseChannel.unsubscribe()
+  })
 </script>
 
 <template>
@@ -26,7 +74,11 @@
         </v-dialog>
       </template>
       <template #tabs>
-        <PlannerTabs :source-table="sourceTable" v-slot="slotProps">
+        <PlannerTabs 
+          :source-table="sourceTable"
+          :source-store="workoutPlanStore"
+          v-slot="slotProps"
+        >
             <WorkoutPlansContainer :workoutPlanId = "slotProps.itemId"/>
         </PlannerTabs>
       </template>
