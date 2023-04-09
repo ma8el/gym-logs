@@ -1,6 +1,7 @@
 <script setup lang="ts">
   const props = defineProps(['workoutPlanId'])
   const supabase = useSupabaseClient()
+  const userStore = useUserStore()
 
   const plannedWorkoutsTable = 'planned_workouts'
   const workoutsTable = 'workouts'
@@ -9,7 +10,6 @@
   const plannedWorkouts = ref()
 
   const addPlannedWorkout = async () => {
-      const user = useSupabaseUser()
       await supabase
         .from(plannedWorkoutsTable)
         .insert(
@@ -17,7 +17,7 @@
             workout_id: workouts.value[0].id,
             workout_plan_id: props.workoutPlanId,
             day_of_week_id: 1,
-            user_id: user.value.id
+            user_id: userStore.user
             },
         )
       loadPlannedWorkouts(props.workoutPlanId).then((data) => {
@@ -44,6 +44,11 @@
     })
   })
 
+  onUpdated(() => {
+    loadPlannedWorkouts(props.workoutPlanId).then((data) => {
+      plannedWorkouts.value = data
+    })
+  })
 </script>
 
 <template>
@@ -55,7 +60,7 @@
     </v-col>
   </v-row>
   <div v-for="plannedWorkout in plannedWorkouts" :key="plannedWorkout.id">
-    <PlannedWorkoutsForm :plannedWorkoutId="plannedWorkout.id" @delete-planned-workouts="deletePlannedWorkout"/>
+    <PlannedWorkoutsForm :plannedWorkoutId="plannedWorkout.id" :workoutPlanId="$props.workoutPlanId"/>
     <v-spacer></v-spacer>
   </div>
 </template>

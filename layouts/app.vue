@@ -1,17 +1,17 @@
 <script setup lang="ts">
   const supabase = useSupabaseClient()
+  const userStore = useUserStore()
+
   const loading = ref(true)
   const username = ref('')
   const avatar_path = ref('')
-  const src = ref('')
   
   loading.value = true
-  const user = useSupabaseUser()
   
   let { data } = await supabase
     .from('profiles')
     .select(`username, avatar_url`)
-    .eq('id', user.value.id)
+    .eq('id', userStore.user)
     .single()
   
   if (data) {

@@ -47,6 +47,10 @@
       }
     }
   }
+  onMounted(() => {
+    const userStore = useUserStore()
+    userStore.fetchUser()
+  })
 </script>
 
 <template>

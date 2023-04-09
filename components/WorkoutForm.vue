@@ -1,6 +1,7 @@
 <script setup lang="ts"> 
   import { useField, useForm } from 'vee-validate'
   const supabase = useSupabaseClient()
+  const userStore = useUserStore()
 
   const emit = defineEmits(['closeWorkoutForm'])
   const { handleSubmit, handleReset } = useForm({
@@ -21,13 +22,12 @@
   const description = useField('description')
 
   const submit = handleSubmit(async values => {
-    const user = useSupabaseUser()
     const { error } = await supabase
       .from('workouts')
       .insert({
         created_at: new Date(),
         updated_at: new Date(),
-        user_id: user.value.id,
+        user_id: userStore.user,
         name: values.name,
         description: values.description? values.description : 'No description',
       })

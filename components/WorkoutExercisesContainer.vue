@@ -7,6 +7,8 @@
 
   const workoutExercises = ref()
 
+  const userStore = useUserStore()
+
   const deleteWorkoutExercise = async (id: number) => {
     await supabase
       .from(workoutExercisesTable)
@@ -18,14 +20,13 @@
   }
  
   const addExercise = async () => {
-    const user = useSupabaseUser()
     await supabase
     .from(workoutExercisesTable)
     .insert(
       {
         workout_id: props.workoutId,
         exercise_id: 1,
-        user_id: user.value.id
+        user_id: userStore.user
       },
     )
    loadWorkoutExercises(props.workoutId).then((data) => {
