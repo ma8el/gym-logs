@@ -37,13 +37,13 @@ export const useExercisesStore = defineStore('exercises', {
 
 export const useWorkoutsStore = defineStore('workouts', {
     state: () => ({
-        workouts: undefined as Database['public']['Tables']['workouts']['Row'][] | undefined
+        data: undefined as Database['public']['Tables']['workouts']['Row'][] | undefined
     }),
 
     actions: {
         async fetchData() {
             loadItems('workouts').then((data) => {
-                this.workouts = data?.map((workout) => (
+                this.data = data?.map((workout) => (
                     {
                         id: workout.id,
                         created_at: workout.created_at,
@@ -60,13 +60,13 @@ export const useWorkoutsStore = defineStore('workouts', {
 
 export const useWorkoutPlansStore = defineStore('workoutPlans', {
     state: () => ({
-        workouts: undefined as Database['public']['Tables']['workout_plans']['Row'][] | undefined
+        data: undefined as Database['public']['Tables']['workout_plans']['Row'][] | undefined
     }),
 
     actions: {
         async fetchData() {
             loadItems('workout_plans').then((data) => {
-                this.workouts = data?.map((workout) => (
+                this.data = data?.map((workout) => (
                     {
                         id: workout.id,
                         created_at: workout.created_at,
