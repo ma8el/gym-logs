@@ -1,15 +1,16 @@
 <script setup lang="ts">
   const props = defineProps(['workoutPlanId'])
   const supabase = useSupabaseClient()
-  const userStore = useUserStore()
 
   const plannedWorkoutsTable = 'planned_workouts'
   const workoutsTable = 'workouts'
 
+  const userStore = useUserStore()
   const plannedWorkoutStore = usePlannedWorkoutsStore()
 
   const workouts = ref()
   const plannedWorkouts = ref()
+  const dialog = ref(false)
 
   const addPlannedWorkout = async () => {
       await supabase
@@ -48,10 +49,26 @@
 
 <template>
   <v-row>
-    <v-col cols="3">
+    <v-col cols="2">
       <v-btn color="orange" @click="addPlannedWorkout()">
         add workout
       </v-btn>
+    </v-col>
+    <v-col cols="4">
+      <v-dialog
+        v-model="dialog"
+        width="800"
+      >
+        <template v-slot:activator="{ props }">
+          <v-btn
+            class="primary"
+            v-bind="props"
+          >
+            Schedule workout plan
+          </v-btn>
+        </template>
+        <WorkoutScheduleForm @close-workout-schedule-form="dialog = false" :workoutPlanId="props.workoutPlanId"/>
+      </v-dialog>
     </v-col>
   </v-row>
   <div v-for="plannedWorkout in plannedWorkouts" :key="plannedWorkout.id">
