@@ -4,7 +4,7 @@ export const useUserStore = defineStore('user', {
     }),
   
     actions: {
-      async fetchUser() {
+      fetchUser() {
         const supabaseUser = useSupabaseUser()
         this.user = supabaseUser.value?.id
       }
