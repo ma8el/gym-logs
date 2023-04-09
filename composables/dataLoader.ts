@@ -16,11 +16,10 @@ export const loadDaysOfWeek = async () => {
   }
 }
 
-export const loadWorkoutExercises = async (workoutId: number) => {
+export const loadWorkoutExercises = async () => {
   const { data, error } = await supabase
     .from(workoutExercisesTable)
     .select(`id, workout_id, exercise_id, sets, reps, weight, resttime, rir, created_at, updated_at, valid`)
-    .eq('workout_id', workoutId)
   if (error) {
     console.log(error)
   } else {

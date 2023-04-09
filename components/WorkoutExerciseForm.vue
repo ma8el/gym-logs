@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { useField, useForm } from 'vee-validate'
   const supabase = useSupabaseClient()
+  const exerciseStore = useExercisesStore()
 
   const { validate, handleReset } = useForm({
     validationSchema: {
@@ -88,8 +89,9 @@
   }
 
   onMounted (async () => {
-    const { data } = await supabase.from('exercises').select(`id, name`)
-    exercises.value = data?.map((exercise: any) => ({title: exercise.name, value: exercise.id}))
+    if (exerciseStore.exercises) {
+      exercises.value = exerciseStore.exercises.map((exercise: any) => ({title: exercise.name, value: exercise.id}))
+    }
     loadWorkoutExercise()
  })
 </script>

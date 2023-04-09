@@ -109,8 +109,8 @@ export const useWorkoutExercisesStore = defineStore('workoutExercises', {
     }),
 
     actions: {
-        async fetchData(workoutId: number) {
-            loadWorkoutExercises(workoutId).then((data) => {
+        async fetchData() {
+            loadWorkoutExercises().then((data) => {
                 this.workoutExercises = data?.map((workoutExercise) => (
                     {
                         id: workoutExercise.id,

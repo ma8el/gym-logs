@@ -8,15 +8,13 @@
   const workoutExercises = ref()
 
   const userStore = useUserStore()
+  const workoutExercisesStore = useWorkoutExercisesStore()
 
   const deleteWorkoutExercise = async (id: number) => {
     await supabase
       .from(workoutExercisesTable)
       .delete()
       .eq('id', id)
-    loadWorkoutExercises(props.workoutId).then((data) => {
-      workoutExercises.value = data
-    })
   }
  
   const addExercise = async () => {
@@ -29,15 +27,24 @@
         user_id: userStore.user
       },
     )
-   loadWorkoutExercises(props.workoutId).then((data) => {
-     workoutExercises.value = data
-    })
+  }
+
+  const updateWorkoutExercises = async (store) => {
+    if(store.workoutExercises) {
+      workoutExercises.value = store.workoutExercises
+        .filter((workoutExercise: any) => 
+          workoutExercise.workout_id === props.workoutId)
+    } else {
+      workoutExercises.value = undefined
+    }
   }
 
   onMounted(() => {
-    loadWorkoutExercises(props.workoutId).then((data) => {
-      workoutExercises.value = data
-    })
+    updateWorkoutExercises(workoutExercisesStore)
+  })
+
+  watch(workoutExercisesStore, (newVal) => {
+    updateWorkoutExercises(newVal)
   })
 </script>
 
@@ -50,7 +57,7 @@
     </v-col>
   </v-row>
   <div v-for="workoutExercise in workoutExercises" :key="workoutExercise.id">
-    <WorkoutExerciseForm :workoutExerciseId="workoutExercise.id" @delete-workout-exercies="deleteWorkoutExercise"/>
+    <WorkoutExerciseForm :workoutExerciseId="workoutExercise.id" @delete-workout-exercies="deleteWorkoutExercise(workoutExercise.id)"/>
     <v-spacer></v-spacer>
   </div>
 </template>

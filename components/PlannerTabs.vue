@@ -8,7 +8,7 @@
   }
 
   const supabase = useSupabaseClient()
-  const props = defineProps(['sourceTable'])
+  const props = defineProps(['sourceTable', 'sourceStore'])
   
   const items = ref()
 
@@ -46,15 +46,11 @@
   }
 
   onMounted(async () => {
-    loadItems(props.sourceTable).then(data => {
-      items.value = data
-    })
+      items.value = props.sourceStore.data
   })
 
-  onUpdated(async () => {
-    loadItems(props.sourceTable).then(data => {
-      items.value = data
-    })
+  watch(props.sourceStore, (newVal) => {
+    items.value = newVal.data
   })
 </script>
 
