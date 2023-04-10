@@ -54,7 +54,7 @@ async function updateProfile() {
 <template>
   <div class="container">
     <form  @submit.prevent="updateProfile">
-      <div>
+      <div class="avatar-container">
         <Avatar v-model:path="avatar_path" @upload="updateProfile" />
       </div>
       <div>
@@ -81,3 +81,11 @@ async function updateProfile() {
     </form>
   </div>
 </template>
+
+<style scoped>
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1em;
+}
+</style>
