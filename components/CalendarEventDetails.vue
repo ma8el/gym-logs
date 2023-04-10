@@ -1,6 +1,7 @@
 <script setup lang="ts">
   const props = defineProps(['eventDetails'])
   const emit = defineEmits(['close'])
+  const startWorkoutDialog = ref(false)
 
   onMounted(() => {
     console.log(props.eventDetails.valid)
@@ -72,13 +73,24 @@
                 </v-list-item-content>
             </v-list-item>
         </v-list>
-        <v-btn
-          color="orange"
-          class="ma-2"
-          :disabled="!eventDetails.valid"
-        >
-          Start Workout
-        </v-btn>
+          <v-dialog
+            v-model="startWorkoutDialog"
+            fullscreen
+            :scrim="false"
+            transition="dialog-bottom-transition"
+          >
+          <template v-slot:activator="{ props }">
+            <v-btn
+              color="orange"
+              class="ma-2"
+              :disabled="!eventDetails.valid"
+              @click="startWorkoutDialog = true"
+            >
+              Start Workout
+            </v-btn>
+          </template>
+          <StartedWorkoutPane @close="startWorkoutDialog = false" :title="eventDetails.title.toUpperCase()"/>
+        </v-dialog>
       </v-card-text>
       <v-card-actions>
         <v-btn
@@ -96,5 +108,9 @@
 <style scoped>
   .workout-alert {
       white-space: pre-line;
+  }
+  .dialog-bottom-transition-enter-active,
+  .dialog-bottom-transition-leave-active {
+    transition: transform .2s ease-in-out;
   }
 </style>
