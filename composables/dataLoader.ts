@@ -2,6 +2,7 @@ const daysOfWeekTable = 'days_of_week'
 const workoutExercisesTable = 'workout_exercises'
 const plannedWorkoutsTable = 'planned_workouts'
 const exercisesTable = 'exercises'
+const workoutScheduleTable = 'workout_schedule'
 
 export const loadDaysOfWeek = async () => {
   const supabase = useSupabaseClient()
@@ -56,6 +57,18 @@ export const loadExercises = async () => {
   const { data, error } = await supabase
     .from(exercisesTable)
     .select(`id, name, description, muscles`)
+  if (error) {
+    console.log(error)
+  } else {
+    return data
+  }
+}
+
+export const loadWorkoutSchedule = async () => {
+  const supabase = useSupabaseClient()
+  const { data, error } = await supabase
+    .from(workoutScheduleTable)
+    .select(`id, user_id, created_at, updated_at, starts_at, ends_at, workout_plan_id`)
   if (error) {
     console.log(error)
   } else {

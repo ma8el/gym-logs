@@ -130,3 +130,27 @@ export const useWorkoutExercisesStore = defineStore('workoutExercises', {
         }
     }
 })
+
+export const useWorkoutScheduleStore = defineStore('workoutSchedule', {
+    state: () => ({
+        workoutSchedule: undefined as Database['public']['Tables']['workout_schedule']['Row'][] | undefined
+    }),
+
+    actions: {
+        async fetchData() {
+            loadWorkoutSchedule().then((data) => {
+                this.workoutSchedule = data?.map((workoutSchedule) => (
+                    {
+                        id: workoutSchedule.id,
+                        user_id: workoutSchedule.user_id,
+                        created_at: workoutSchedule.created_at,
+                        updated_at: workoutSchedule.updated_at,
+                        starts_at: workoutSchedule.starts_at,
+                        ends_at: workoutSchedule.ends_at,
+                        workout_plan_id: workoutSchedule.workout_plan_id,
+                    }
+                ))
+            })
+        }
+    }
+})

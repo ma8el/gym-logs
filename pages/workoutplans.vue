@@ -7,6 +7,7 @@
   const workoutStore = useWorkoutsStore()
   const plannedWorkoutStore = usePlannedWorkoutsStore()
   const daysOfWeekStore = useDaysOfWeekStore()
+  const workoutScheduleStore = useWorkoutScheduleStore()
 
   const workoutChannel = supabase
     .channel('workout-plans-table-change')
@@ -32,21 +33,36 @@
         () => plannedWorkoutStore.fetchData()
   )
 
+  const workoutScheduleChannel = supabase
+    .channel('scheduled-workouts-table-change')
+    .on(
+        'postgres_changes',
+        {
+            event: '*',
+            schema: 'public',
+            table: 'workout_schedule',
+        },
+        () => workoutScheduleStore.fetchData()
+  )
+
   onBeforeMount(() => {
     workoutPlanStore.fetchData()
     workoutStore.fetchData()
     plannedWorkoutStore.fetchData()
     daysOfWeekStore.fetchData()
+    workoutScheduleStore.fetchData()
   })
 
   onMounted(() => {
     workoutChannel.subscribe()
     workoutExerciseChannel.subscribe()
+    workoutScheduleChannel.subscribe()
   })
 
   onUnmounted(() => {
     workoutChannel.unsubscribe()
     workoutExerciseChannel.unsubscribe()
+    workoutScheduleChannel.unsubscribe()
   })
 </script>
 
