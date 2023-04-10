@@ -103,22 +103,7 @@
     <v-toolbar-title v-if="isValidWorkoutExercise">{{ `${sets.value.value} x ${reps.value.value}` }}</v-toolbar-title>
     <v-spacer></v-spacer>
     <div v-if="!isValidWorkoutExercise">
-      <v-tooltip
-        start
-        text="There are fields missing or invalid"
-      >
-      <template v-slot:activator="{ props }">
-        <v-btn
-          icon
-          v-bind="props"
-          class="circle-exclamation"
-        >
-        <v-icon>
-          mdi-alert-circle
-        </v-icon>
-        </v-btn>
-      </template>
-      </v-tooltip>
+      <MissingValuesExclamationMark/>
     </div>
     <v-btn
       icon="mdi-pencil"
@@ -224,8 +209,5 @@
   margin: 1rem 1rem 1rem 1rem;
 }
 
-.circle-exclamation {
-  margin-right: 2rem;
-  border-radius: 50%;
-}
+
 </style>
