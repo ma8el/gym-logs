@@ -29,9 +29,7 @@
   })
 
   onMounted(() => {
-    calendarEventStore.fetchData().then(() => {
       events.value = calendarEventStore.events
-    })
   })
 
 </script>

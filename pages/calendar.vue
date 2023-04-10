@@ -1,3 +1,11 @@
+<script setup lang="ts">
+  const calendarEventStore = useCalendarEventStore()
+
+  onBeforeMount(() => {
+    calendarEventStore.fetchData()
+  })
+</script>
+
 <template>
   <NuxtLayout name="app">
     <h1>Calendar</h1>
