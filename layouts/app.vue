@@ -48,11 +48,14 @@
               <NuxtLink to="/" class="link">
                   <v-list-item prepend-icon="mdi-chart-box" title="Dashboard" nav></v-list-item>
               </NuxtLink>
-              <NuxtLink to="/workoutplans" class="link">
-                  <v-list-item prepend-icon="mdi-table-clock" title="Workout Plans" nav></v-list-item>
-              </NuxtLink>
               <NuxtLink to="/workout" class="link">
                   <v-list-item prepend-icon="mdi-weight-kilogram" title="Workouts" nav></v-list-item>
+              </NuxtLink>
+              <NuxtLink to="/workoutplans" class="link">
+                  <v-list-item prepend-icon="mdi-content-paste" title="Workout Plans" nav></v-list-item>
+              </NuxtLink>
+              <NuxtLink to="/workoutschedule" class="link">
+                  <v-list-item prepend-icon="mdi-table-clock" title="Workout Schedule" nav></v-list-item>
               </NuxtLink>
                <NuxtLink to="/exercises" class="link">
                   <v-list-item prepend-icon="mdi-grid" title="Exercises" nav></v-list-item>
