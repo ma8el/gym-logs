@@ -70,4 +70,10 @@ interface CalendarEvent {
   start: string
   end: string
   color: string
+  workoutId: number
+  workoutPlanId: number
+  workoutName: string
+  workoutDescription: string
+  workoutPlanName: string
+  valid: boolean
 }

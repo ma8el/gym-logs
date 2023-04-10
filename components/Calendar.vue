@@ -5,8 +5,9 @@
   import dayGridPlugin from '@fullcalendar/daygrid'
 
   const calendarEventStore = useCalendarEventStore()
+  const showEventDetails = ref(false)
+  const eventDetails = ref()
 
-  const events = ref()
   const headerToolbar = {
     left: 'prev,next today',
     center: 'title',
@@ -24,17 +25,35 @@
       selectable: true,
       locale: 'en',
       firstDay: 1,
-      events: events.value,
+      events: calendarEventStore.events,
+      eventClick: handleEventClick,
       }
   })
 
-  onMounted(() => {
-      events.value = calendarEventStore.events
-  })
-
+  const handleEventClick = (info) => {
+    eventDetails.value = {
+      title: info.event.title,
+      start: info.event.start,
+      end: info.event.end,
+      workoutId: info.event._def.extendedProps.workoutId,
+      workoutPlanId: info.event._def.extendedProps.workoutPlanId,
+      workoutName: info.event._def.extendedProps.workoutName,
+      workoutPlanName: info.event._def.extendedProps.workoutPlanName,
+      workoutDescription: info.event._def.extendedProps.workoutDescription,
+      valid: info.event._def.extendedProps.valid
+    }
+    showEventDetails.value = true
+  }
 </script>
+
 <template>
-    <FullCalendar :options='calendarOptions'/>
+  <FullCalendar :options='calendarOptions'/>
+  <v-dialog
+    v-model="showEventDetails"
+    width="auto"
+  >
+    <CalendarEventDetails :eventDetails="eventDetails" @close="showEventDetails = !showEventDetails"/>
+  </v-dialog>
 </template>
 
 <style scoped>

@@ -197,10 +197,16 @@ export const useCalendarEventStore = defineStore('calendarEvent', {
               const end = new Date(start.getTime() + 90 * 60 * 1000);
         
               instances.push({
-                title: `${event.workout_plan_name}: ${event.workout_name}`,
+                title: event.workout_name,
                 start: start.toISOString(),
                 end: end.toISOString(),
                 color: event.valid ? "orange" : "#FF0000",
+                workoutId: event.workout_id,
+                workoutPlanId: event.workout_plan_id,
+                workoutName: event.workout_name,
+                workoutPlanName: event.workout_plan_name,
+                workoutDescription: event.workout_description,
+                valid: event.valid
               });
             }
             currentDate.setDate(currentDate.getDate() + 1);
