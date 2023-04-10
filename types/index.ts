@@ -65,3 +65,9 @@ interface UserStatistics {
   performance: Performance
 }
 
+interface CalendarEvent {
+  title: string
+  start: string
+  end: string
+  color: string
+}

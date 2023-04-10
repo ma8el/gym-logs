@@ -154,3 +154,59 @@ export const useWorkoutScheduleStore = defineStore('workoutSchedule', {
         }
     }
 })
+
+export const useCalendarEventStore = defineStore('calendarEvent', {
+    state: () => ({
+        rawEvents: undefined
+    }),
+
+    actions: {
+      async loadCalendarEventData() {
+        const supabase = useSupabaseClient()
+        const { data, error } = await supabase
+          .from('v_scheduled_workouts')
+          .select(`*`)
+        if (error) {
+          console.log(error)
+        } else {
+          return data
+        }
+      },
+      async fetchData() {
+        this.rawEvents = await this.loadCalendarEventData()
+      }
+    },
+    getters: {
+      events: (state) => {
+        const instances: CalendarEvent[] = [];
+        if (!state.rawEvents) {
+          return instances;
+        }
+        state.rawEvents.forEach((event) => {
+          const startDate = new Date(event.starts_at);
+          const endDate = new Date(event.ends_at);
+        
+          let currentDate = new Date(startDate);
+          const timeOfDay = event.time_of_day ? event.time_of_day.split(":") : [0, 0];
+        
+          while (currentDate <= endDate) {
+            if (currentDate.getDay() === event.day_of_week_id) {
+              const start = new Date(currentDate);
+              start.setHours(timeOfDay[0], timeOfDay[1], 0, 0);
+        
+              const end = new Date(start.getTime() + 90 * 60 * 1000);
+        
+              instances.push({
+                title: `${event.workout_plan_name}: ${event.workout_name}`,
+                start: start.toISOString(),
+                end: end.toISOString(),
+                color: event.valid ? "orange" : "#FF0000",
+              });
+            }
+            currentDate.setDate(currentDate.getDate() + 1);
+          }
+        });
+        return instances;
+      }
+  },
+})
