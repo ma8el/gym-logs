@@ -55,17 +55,10 @@
     <div class="dashboard">
         <v-row>
           <v-col cols="3">
-            <v-card>
-              <v-card-title>
-                <h4>You</h4>
-              </v-card-title>
-              <v-card-text>
-                <p>Gender: {{ userStatistics.gender }}</p>
-                <p>Age: {{ userStatistics.age }} years</p>
-                <p>weight: {{ userStatistics.weight }}kg</p>
-                <p>Height: {{ userStatistics.height }}cm</p>
-              </v-card-text>
-            </v-card>
+            <YouCard/>
+          </v-col>
+          <v-col cols="3">
+            <WeightCard/>
           </v-col>
           <v-col cols="3">
             <v-card>
