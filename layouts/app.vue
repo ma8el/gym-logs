@@ -60,15 +60,15 @@
                <NuxtLink to="/exercises" class="link">
                   <v-list-item prepend-icon="mdi-grid" title="Exercises" nav></v-list-item>
               </NuxtLink>
-                <NuxtLink to="/nutrition" class="link">
+<!--                <NuxtLink to="/nutrition" class="link">
                   <v-list-item prepend-icon="mdi-nutrition" title="Nutrition" nav></v-list-item>
-              </NuxtLink>
+              </NuxtLink>-->
               <NuxtLink to="/calendar" class="link">
                   <v-list-item prepend-icon="mdi-calendar" title="Calendar" nav></v-list-item>
               </NuxtLink>
-              <NuxtLink to="/you" class="link">
+<!--              <NuxtLink to="/you" class="link">
                   <v-list-item prepend-icon="mdi-human-edit" title="You" nav></v-list-item>
-              </NuxtLink>
+              </NuxtLink> -->
             </v-list>
             <template v-slot:append>
               <div class="pa-2">
