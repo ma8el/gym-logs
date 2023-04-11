@@ -35,9 +35,7 @@
   })
 
   onMounted(() => {
-    loadUserStats().then(() => {
-      weight.value = 80
-    })
+    loadUserStats()
   })
 
 </script>
@@ -50,7 +48,6 @@
     <v-card-text>
       <div class="text-subtitle-1">Gender: {{ gender }}</div>
       <div class="text-subtitle-1">Age: {{ age }} years</div>
-      <div class="text-subtitle-1">weight: {{ weight }}kg</div>
       <div class="text-subtitle-1">Height: {{ height }}cm</div>
     </v-card-text>
   </v-card>
