@@ -17,7 +17,7 @@
   
   let { data } = await supabase
     .from('profiles')
-    .select(`username, first_name, last_name, date_of_birth, avatar_url`)
+    .select(`username, first_name, last_name, date_of_birth, avatar_url, gender`)
     .eq('id', user.value.id)
     .single()
   
