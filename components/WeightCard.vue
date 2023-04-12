@@ -1,9 +1,19 @@
 <script setup lang="ts">
-  const lastUpdated = ref('2021-01-01')
-  const currentWeight = ref(80)
-  const weightGoal = ref(70)
   const dialog = ref(false)
 
+  const weightStore = useWeightStore()
+  const weightGoal = ref(70)
+  const currentWeight = ref()
+  const lastUpdated = ref()
+
+  onMounted(() => {
+    weightStore.getLatestWeight().then((weight) => {
+      if (weight) {
+        currentWeight.value = weight.weight
+        lastUpdated.value = new Date(weight.created_at).toLocaleDateString()
+      }
+    })
+  })
 </script>
 
 <template>
@@ -28,7 +38,7 @@
             Add weight
           </v-btn>
         </template>
-        <!--Add weight form here-->
+        <WeightForm @close-weight-form="dialog = false"/>
       </v-dialog>
     </v-card-actions>
     </v-card-text>

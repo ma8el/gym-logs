@@ -1,21 +1,20 @@
 <script setup lang="ts">
+  const supabase = useSupabaseClient()
+
   const loading = ref(false)
-  const userStatistics = ref<UserStatistics>({
-      id: 0,
-      at: new Date(),
-      weight: 80,
-      height: 180,
-      age: 25,
-      gender: 'male',
-      performance: {
-        id: 0,
-        at: new Date(),
-        squat: 180,
-        bench: 110,
-        deadlift: 200,
-        overhead: 70,
-      }
-    })
+  const weightStore = useWeightStore()
+
+  const weightChannel = supabase
+     .channel('weights-table-change')
+     .on(
+         'postgres_changes',
+         {
+           event: '*',
+           schema: 'public',
+           table: 'weights',
+         },
+         () => weightStore.fetchWeights()
+       )
 
   const data = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -47,6 +46,18 @@
       }
     }
   }
+
+  onBeforeMount(() => {
+    weightStore.fetchWeights()
+  })
+  
+  onMounted(() => {
+    weightChannel.subscribe()
+  })
+
+  onUnmounted(() => {
+    weightChannel.unsubscribe()
+  })
 </script>
 
 <template>
@@ -66,10 +77,6 @@
                 <h4>Performance</h4>
               </v-card-title>
               <v-card-text>
-                <p>Squat: {{ userStatistics.performance.squat }}kg</p>
-                <p>Deadlift: {{ userStatistics.performance.deadlift }}kg</p>
-                <p>Bench: {{ userStatistics.performance.bench }}kg</p>
-                <p>Overhead: {{ userStatistics.performance.overhead }}kg</p>
               </v-card-text>
             </v-card>
           </v-col>
