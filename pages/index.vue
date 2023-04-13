@@ -16,36 +16,45 @@
          () => weightStore.fetchWeights()
        )
 
-  const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [
-      {
-        label: 'Bench',
-        backgroundColor: 'orange',
-        borderColor: 'orange',
-        data: [40, 39, 10, 40, 39, 80, 40]
-      },
-      {
-        label: 'Goal',
-        backgroundColor: '#222',
-        borderColor: '#222',
-        pointStyle: false,
-        borderDash: [5, 5],
-        data: [100, 100, 100, 100, 100, 100, 100]
-      }
-    ]
-  }
-
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      y: {
-        min: 0,
-        max: 120,
-      }
+  const weightData = ref({labels: [], datasets: [{}]})
+  const fetchChartData = async () => {
+    loading.value = true
+    const labels = await weightStore.getSortedDates()
+    const data = await weightStore.getSortedWeights()
+    console.log(data)
+    weightData.value = {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Weight',
+            data: data,
+            borderColor: 'orange',
+            backgroundColor: 'orange',
+            fill: false,
+            tension: 0.1,
+          },
+        ],
     }
+    loading.value = false
   }
+  const weightOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Date and Time',
+          },
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Weight',
+          },
+        },
+      },
+    };
 
   onBeforeMount(() => {
     weightStore.fetchWeights()
@@ -53,10 +62,15 @@
   
   onMounted(() => {
     weightChannel.subscribe()
+    fetchChartData()
   })
 
   onUnmounted(() => {
     weightChannel.unsubscribe()
+  })
+
+  watch(weightStore.getSortedWeights(), () => {
+    fetchChartData()
   })
 </script>
 
@@ -85,10 +99,10 @@
         <v-col cols="6">
           <v-card>
             <v-card-title>
-              Bench
+              Weight
             </v-card-title>
             <v-card-text>
-              <LineChart :data="data" :options="options" />
+              <LineChart :data="weightData" :options="weightOptions" />
             </v-card-text>
           </v-card>
         </v-col>
@@ -98,7 +112,6 @@
               Squat
             </v-card-title>
             <v-card-text>
-              <LineChart :data="data" :options="options" />
             </v-card-text>
           </v-card>
         </v-col>
