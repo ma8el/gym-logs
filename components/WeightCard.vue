@@ -14,6 +14,13 @@
       }
     })
   })
+
+  watch(weightStore, (newVal) => {
+    if (newVal.weights) {
+      currentWeight.value = newVal.weights[0].weight
+      lastUpdated.value = new Date(newVal.weights[0].created_at).toLocaleDateString()
+    }
+  })
 </script>
 
 <template>
