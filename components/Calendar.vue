@@ -33,8 +33,8 @@
   const handleEventClick = (info) => {
     eventDetails.value = {
       title: info.event.title,
-      start: info.event.start,
-      end: info.event.end,
+      start: info.event.start.toISOString(),
+      end: info.event.end.toISOString(),
       workoutId: info.event._def.extendedProps.workoutId,
       workoutPlanId: info.event._def.extendedProps.workoutPlanId,
       workoutName: info.event._def.extendedProps.workoutName,

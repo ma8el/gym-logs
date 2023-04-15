@@ -2,10 +2,6 @@
   const props = defineProps(['eventDetails'])
   const emit = defineEmits(['close'])
   const startWorkoutDialog = ref(false)
-
-  onMounted(() => {
-    console.log(props.eventDetails.valid)
-  })
 </script>
 
 <template>
@@ -28,7 +24,7 @@
                     Start
                 </v-list-item-title>
                 <v-list-item-subtitle>
-                    {{ new Date(eventDetails.start).toLocaleString() }}
+                    {{ eventDetails.start }}
                 </v-list-item-subtitle>
                 </v-list-item-content>
             </v-list-item>
@@ -38,7 +34,7 @@
                     End
                 </v-list-item-title>
                 <v-list-item-subtitle>
-                    {{ new Date(eventDetails.end).toLocaleString() }}
+                    {{ eventDetails.end }}
                 </v-list-item-subtitle>
                 </v-list-item-content>
             </v-list-item>
@@ -73,24 +69,7 @@
                 </v-list-item-content>
             </v-list-item>
         </v-list>
-          <v-dialog
-            v-model="startWorkoutDialog"
-            fullscreen
-            :scrim="false"
-            transition="dialog-bottom-transition"
-          >
-          <template v-slot:activator="{ props }">
-            <v-btn
-              color="orange"
-              class="ma-2"
-              :disabled="!eventDetails.valid"
-              @click="startWorkoutDialog = true"
-            >
-              Start Workout
-            </v-btn>
-          </template>
-          <StartedWorkoutPane @close="startWorkoutDialog = false" :title="eventDetails.title.toUpperCase()"/>
-        </v-dialog>
+      <WorkoutSessionDialog :event="eventDetails"/>
       </v-card-text>
       <v-card-actions>
         <v-btn
