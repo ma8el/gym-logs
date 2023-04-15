@@ -46,8 +46,8 @@
     }
   }
 
-  const handleFinishWorkout = async () => {
-    const { error } = await supabase
+  const insertWorkoutSession = async () => {
+    const { data, error } = await supabase
       .from('workout_sessions')
       .insert([
         {
@@ -58,10 +58,39 @@
           scheduled_at: workoutSessionData.value[0].date,
           started_at: startedAt.value,
           finished_at: new Date().toISOString(),
-          performance: {},
           notes: ''
         }
-      ])
+      ]).select(`id`)
+      .single()
+    if (error) {
+      console.log(error)
+      } else {
+      return data.id
+    }
+  }
+
+  const handleFinishWorkout = async () => {
+    const workoutSessionID = await insertWorkoutSession()
+    const { error } = await supabase
+      .from('workout_session_performances')
+      .insert(workoutSets.value.map((set) => {
+        return {
+          workout_session_id: workoutSessionID,
+          user_id: userStore.user,
+          exercise_id: set.exercise_id,
+          set: set.set,
+          planned_reps: set.reps,
+          performed_reps: set.performedReps,
+          planned_weight: set.weight,
+          performed_weight: set.performedWeight,
+          planned_rir: set.rir,
+          performed_rir: set.performedRIR,
+          resttime: 0,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
+      })
+    )
     emit('close')
   }
 
