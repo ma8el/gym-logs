@@ -32,8 +32,6 @@
         activeSlide.value += 1
       }
       emit('start')
-      console.log(activeSlide.value)
-      console.log(phase.value)
     }
   }
 
@@ -46,14 +44,11 @@
         activeSlide.value -= 1
       }
 
-      console.log(activeSlide.value)
-      console.log(phase.value)
     }
   }
 
   const handleFinishWorkout = async () => {
     emit('close')
-    console.log(workoutSets.value)
   }
 
   const calculateWorkoutSets = async () => {
