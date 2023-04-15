@@ -1,15 +1,14 @@
 <script setup lang="ts">
   const props = defineProps(['workoutId', 'startsAt'])
   const emit = defineEmits(['start', 'close'])
+  const userStore = useUserStore()
   const supabase = useSupabaseClient()
   const workoutSessionData = ref([{}])
   const activeSlide = ref(0)
   const phase = ref(0)
   const totalSlides = ref(0)
+  const startedAt = ref(new Date().toISOString())
   
-  const performanceReps = ref(0)
-  const performanceWeight = ref(0)
-
   const fetchWorkoutData = async () => {
     const { data, error } = await supabase
       .from('v_scheduled_workout_sessions')
@@ -48,6 +47,21 @@
   }
 
   const handleFinishWorkout = async () => {
+    const { error } = await supabase
+      .from('workout_sessions')
+      .insert([
+        {
+          created_at: new Date(),
+          updated_at: new Date(),
+          workout_id: workoutSessionData.value[0].workout_id,
+          user_id: userStore.user,
+          scheduled_at: workoutSessionData.value[0].date,
+          started_at: startedAt.value,
+          finished_at: new Date().toISOString(),
+          performance: {},
+          notes: ''
+        }
+      ])
     emit('close')
   }
 
@@ -74,6 +88,8 @@
     await fetchWorkoutData()
     workoutSets.value = await calculateWorkoutSets()
     totalSlides.value = workoutSets.value.length
+    const start = new Date()
+    startedAt.value = start.toISOString()
   })
 
 </script>
