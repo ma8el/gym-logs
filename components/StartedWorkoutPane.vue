@@ -58,19 +58,21 @@
         {{ minutes }}:{{ seconds }}.{{ milliseconds }}
       </div>
       <v-row justify="center">
-        <v-col cols="6">
+        <v-col cols="4">
           <v-btn color="orange" @click="stopTimer">Pause</v-btn>
         </v-col>
 <!--        <v-col cols="4">
           <v-btn color="orange" @click="resetTimer">Reset</v-btn>
         </v-col>-->
       </v-row>
-      <WorkoutSessionContainer 
-        @start="startTimer"
-        :workoutId="workoutId"
-        :startsAt="startsAt"
-      />
     </div>
+    <v-divider></v-divider>
+    <WorkoutSessionContainer 
+      @start="startTimer"
+      @close="emit('close')"
+      :workoutId="workoutId"
+      :startsAt="startsAt"
+    />
   </v-card>
 </template>
 
@@ -81,6 +83,6 @@
   align-items: center;
   justify-content: center;
   margin-top: 2rem;
-  height: 100%;
+  margin-bottom: 2rem;
 }
 </style>
