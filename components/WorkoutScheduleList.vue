@@ -22,12 +22,21 @@
       return 0;
     });
   });
+
+  const sortedEventsWithShowStartWorkoutDialog = computed(() => {
+    return sortedEvents.value.map((event) => {
+      return {
+        ...event,
+        startWorkoutDialog: false
+      }
+    })
+  })
 </script>
 
 <template>
   <v-list>
     <v-list-item 
-      v-for="event in sortedEvents"
+      v-for="event in sortedEventsWithShowStartWorkoutDialog"
       :key="event.workoutId"
     >
         <div class="card-content">
@@ -46,25 +55,7 @@
               <MissingValuesExclamationMark/>
             </div>
             <v-spacer></v-spacer>
-            <v-dialog
-              v-model="startWorkoutDialog"
-              fullscreen
-              :scrim="false"
-              transition="dialog-bottom-transition"
-            >
-              <template v-slot:activator="{ props }">
-                <v-btn
-                  color="orange"
-                  size="small"
-                  class="mr-5"
-                  :disabled="!event.valid"
-                  @click="startWorkoutDialog = true"
-                >
-                  Start Workout
-                </v-btn>
-              </template>
-              <StartedWorkoutPane @close="startWorkoutDialog = false" :title="event.title.toUpperCase()"/>
-            </v-dialog>
+            <WorkoutSessionDialog :event="event"/>
           </v-row>
         </div>
         <v-divider></v-divider>
