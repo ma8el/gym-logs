@@ -216,3 +216,105 @@ export const useCalendarEventStore = defineStore('calendarEvent', {
       }
   },
 })
+
+export const useWorkoutSessionStore = defineStore('workoutSession', {
+    state: () => ({
+        workoutSessions: undefined as Database['public']['Tables']['workout_sessions']['Row'][] | undefined,
+        plannedWorkoutSessions: undefined
+    }),
+
+    actions: {
+      async fetchPlannedWorkoutSessionData(workoutId: number, startsAt: Date ) {
+        const supabase = useSupabaseClient()
+        const { data, error } = await supabase
+          .from('v_scheduled_workout_sessions')
+          .select('*')
+          .eq('workout_id', `${workoutId}`)
+          .eq('date', startsAt)
+        if (error) {
+          console.log(error)
+        } else {
+          this.plannedWorkoutSessions = data
+        }
+      },
+
+      async fetchWorkoutSessionData() {
+        const supabase = useSupabaseClient()
+        const { data, error } = await supabase
+          .from('workout_sessions')
+          .select('*')
+        if (error) {
+            console.log(error)
+        } else {
+            this.workoutSessions = data
+        }
+      },
+
+      async insertWorkoutSessionData(startedAt: string) {
+        const userStore = useUserStore()
+        const supabase = useSupabaseClient()
+        const { data, error } = await supabase
+          .from('workout_sessions')
+          .insert([
+            {
+              created_at: new Date(),
+              updated_at: new Date(),
+              workout_id: this.plannedWorkoutSessions[0].workout_id,
+              user_id: userStore.user,
+              scheduled_at: this.plannedWorkoutSessions[0].date,
+              started_at: startedAt,
+              finished_at: new Date().toISOString(),
+              notes: ''
+            }
+          ]).select(`id`)
+          .single()
+          if (error) {
+            console.log(error)
+            } else {
+            return data.id
+          }
+        },
+
+      async insertWorkoutSessionPerformance(workoutSessionId: number, workoutSets) { 
+        const userStore = useUserStore()
+        const supabase = useSupabaseClient()
+        const { error } = await supabase
+        .from('workout_session_performances')
+        .insert(workoutSets.map((set) => {
+          return {
+            workout_session_id: workoutSessionId,
+            user_id: userStore.user,
+            exercise_id: set.exercise_id,
+            set: set.set,
+            planned_reps: set.reps,
+            performed_reps: set.performedReps,
+            planned_weight: set.weight,
+            performed_weight: set.performedWeight,
+            planned_rir: set.rir,
+            performed_rir: set.performedRIR,
+            resttime: 0,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }
+        })
+        )
+        if (error) {
+          console.log(error)
+        }
+      },
+    },
+    getters: {
+      calculateWorkoutSets: async (state) => {
+        const sets = []
+        if (!state.plannedWorkoutSessions) {
+            return sets
+        }
+        state.plannedWorkoutSessions.forEach((exercise) => {
+          for(let i = 0; i < exercise.sets; i++) {
+            sets.push({...exercise, set: i + 1, performedReps: 0, performedWeight: 0, performedRIR: 0})
+          }
+        })
+        return sets
+      },
+    }
+})

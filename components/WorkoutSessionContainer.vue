@@ -1,29 +1,16 @@
 <script setup lang="ts">
   const props = defineProps(['workoutId', 'startsAt'])
   const emit = defineEmits(['start', 'close'])
-  const userStore = useUserStore()
-  const supabase = useSupabaseClient()
-  const workoutSessionData = ref([{}])
+
+  const workoutSessionStore = useWorkoutSessionStore()
+
   const activeSlide = ref(0)
   const phase = ref(0)
-  const totalSlides = ref(0)
   const startedAt = ref(new Date().toISOString())
+  const workoutSets = ref([{}])
   
-  const fetchWorkoutData = async () => {
-    const { data, error } = await supabase
-      .from('v_scheduled_workout_sessions')
-      .select('*')
-      .eq('workout_id', `${props.workoutId}`)
-      .eq('date', props.startsAt)
-    if (error) {
-      console.log(error)
-    } else {
-      workoutSessionData.value = data
-    }
-  }
-
   const handleNextClick = () => {
-    if (activeSlide.value !== totalSlides.value || (activeSlide.value === totalSlides.value && phase.value === 0)) {
+    if (activeSlide.value !== workoutSets.value.length || (activeSlide.value === workoutSets.value.length && phase.value === 0)) {
       if(phase.value === 0 && activeSlide.value !== 0) {
         phase.value = 1
       } else {
@@ -46,62 +33,10 @@
     }
   }
 
-  const insertWorkoutSession = async () => {
-    const { data, error } = await supabase
-      .from('workout_sessions')
-      .insert([
-        {
-          created_at: new Date(),
-          updated_at: new Date(),
-          workout_id: workoutSessionData.value[0].workout_id,
-          user_id: userStore.user,
-          scheduled_at: workoutSessionData.value[0].date,
-          started_at: startedAt.value,
-          finished_at: new Date().toISOString(),
-          notes: ''
-        }
-      ]).select(`id`)
-      .single()
-    if (error) {
-      console.log(error)
-      } else {
-      return data.id
-    }
-  }
-
   const handleFinishWorkout = async () => {
-    const workoutSessionID = await insertWorkoutSession()
-    const { error } = await supabase
-      .from('workout_session_performances')
-      .insert(workoutSets.value.map((set) => {
-        return {
-          workout_session_id: workoutSessionID,
-          user_id: userStore.user,
-          exercise_id: set.exercise_id,
-          set: set.set,
-          planned_reps: set.reps,
-          performed_reps: set.performedReps,
-          planned_weight: set.weight,
-          performed_weight: set.performedWeight,
-          planned_rir: set.rir,
-          performed_rir: set.performedRIR,
-          resttime: 0,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
-      })
-    )
+    const workoutSessionID = await workoutSessionStore.insertWorkoutSessionData(startedAt.value)
+    workoutSessionStore.insertWorkoutSessionPerformance(workoutSessionID, workoutSets.value)
     emit('close')
-  }
-
-  const calculateWorkoutSets = async () => {
-    const sets = []
-    await workoutSessionData.value.forEach((exercise) => {
-      for(let i = 0; i < exercise.sets; i++) {
-        sets.push({...exercise, set: i + 1, performedReps: 0, performedWeight: 0, performedRIR: 0})
-      }
-    })
-    return sets
   }
 
   const buttonText = computed(() => {
@@ -112,15 +47,13 @@
     }
   })
 
-  const workoutSets = ref([{}])
   onMounted(async () => {
-    await fetchWorkoutData()
-    workoutSets.value = await calculateWorkoutSets()
-    totalSlides.value = workoutSets.value.length
+    await workoutSessionStore.fetchPlannedWorkoutSessionData(props.workoutId, props.startsAt)
+    workoutSets.value = await workoutSessionStore.calculateWorkoutSets
+
     const start = new Date()
     startedAt.value = start.toISOString()
   })
-
 </script>
 
 <template>
@@ -192,7 +125,7 @@
       </v-btn>
       <v-spacer></v-spacer>
       <v-btn
-        v-if="activeSlide < totalSlides || (activeSlide == totalSlides && phase === 0)"
+        v-if="activeSlide < workoutSets.length || (activeSlide == workoutSets.length && phase === 0)"
         color="orange"
         variant="flat"
         @click="handleNextClick()"
@@ -200,7 +133,7 @@
         {{  buttonText }}
       </v-btn>
       <v-btn
-        v-if="activeSlide == totalSlides && phase === 1"
+        v-if="activeSlide == workoutSets.length && phase === 1"
         color="orange"
         variant="flat"
         @click="handleFinishWorkout()"
