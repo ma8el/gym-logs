@@ -1,8 +1,10 @@
 <script setup lang="ts">
   const calendarEventStore = useCalendarEventStore()
+  const workoutSessionStore = useWorkoutSessionStore()
 
   onBeforeMount(() => {
     calendarEventStore.fetchData()
+    workoutSessionStore.fetchWorkoutSessionData()
   })
 </script>
 
