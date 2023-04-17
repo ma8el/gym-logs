@@ -1,6 +1,5 @@
 <script setup lang="ts">
   const calendarEventStore = useCalendarEventStore()
-  const startWorkoutDialog = ref(false)
 
   const sortedEvents = computed(() => {
     return calendarEventStore.events.sort((a, b) => {
