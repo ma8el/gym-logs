@@ -6,7 +6,7 @@
     <template v-slot:activator="{ props }">
       <v-btn
         icon
-        size="small"
+        size="x-small"
         v-bind="props"
         class="circle-exclamation"
       >
