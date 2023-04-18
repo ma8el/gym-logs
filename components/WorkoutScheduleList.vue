@@ -1,5 +1,6 @@
 <script setup lang="ts">
   const calendarEventStore = useCalendarEventStore()
+  const workoutSessionStore = useWorkoutSessionStore()
 
   const sortedEvents = computed(() => {
     return calendarEventStore.events.sort((a, b) => {
@@ -30,12 +31,25 @@
       }
     })
   })
+
+  const sessionExists = ref([])
+
+  onMounted(async () => {
+    const sessionMeta = workoutSessionStore.workoutSessions.map(({ workout_id, scheduled_at }) => ({ workout_id, scheduled_at }))
+    const calendarMeta = calendarEventStore.events.map(({ workoutId, start }) => ({ workoutId, start }))
+
+    sessionExists.value = calendarMeta.map(calendar => {
+      return sessionMeta.some(session => {
+        return session.workout_id === calendar.workoutId && new Date(session.scheduled_at).toISOString() === calendar.start
+      })
+    })
+})
 </script>
 
 <template>
   <v-list>
     <v-list-item 
-      v-for="event in sortedEventsWithShowStartWorkoutDialog"
+      v-for="(event, index) in sortedEventsWithShowStartWorkoutDialog"
       :key="event.workoutId"
     >
         <div class="card-content">
@@ -54,7 +68,8 @@
               <MissingValuesExclamationMark/>
             </div>
             <v-spacer></v-spacer>
-            <WorkoutSessionDialog :event="event"/>
+            <WorkoutSessionDialog v-if="!sessionExists[index]" :event="event"/>
+            <v-icon v-else>mdi-check-bold</v-icon>
           </v-row>
         </div>
         <v-divider></v-divider>
