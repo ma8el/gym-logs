@@ -250,6 +250,18 @@ export const useWorkoutSessionStore = defineStore('workoutSession', {
         }
       },
 
+      async fetchWorkoutSessionDetailsData() {
+        const supabase = useSupabaseClient()
+        const { data, error } = await supabase
+          .from('workout_sessions')
+          .select('*, workouts(name), workout_session_performances(*)')
+        if(error) {
+          console.log(error)
+        } else {
+          return data
+        }
+      },
+
       async insertWorkoutSessionData(startedAt: string) {
         const userStore = useUserStore()
         const supabase = useSupabaseClient()
