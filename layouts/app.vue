@@ -57,6 +57,9 @@
               <NuxtLink to="/workoutschedule" class="link">
                   <v-list-item prepend-icon="mdi-table-clock" title="Workout Schedule" nav></v-list-item>
               </NuxtLink>
+              <NuxtLink to="/workoutsessions" class="link">
+                  <v-list-item prepend-icon="mdi-check-all" title="Workout Sessions" nav></v-list-item>
+              </NuxtLink>
                <NuxtLink to="/exercises" class="link">
                   <v-list-item prepend-icon="mdi-grid" title="Exercises" nav></v-list-item>
               </NuxtLink>
