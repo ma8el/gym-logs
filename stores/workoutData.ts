@@ -254,7 +254,7 @@ export const useWorkoutSessionStore = defineStore('workoutSession', {
         const supabase = useSupabaseClient()
         const { data, error } = await supabase
           .from('workout_sessions')
-          .select('*, workouts(name), workout_session_performances(*)')
+          .select('*, workouts(name), workout_session_performances(*, exercises(name))')
         if(error) {
           console.log(error)
         } else {
