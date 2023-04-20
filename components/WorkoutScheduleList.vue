@@ -34,16 +34,26 @@
 
   const sessionExists = ref([])
 
-  onMounted(async () => {
-    const sessionMeta = workoutSessionStore.workoutSessions.map(({ workout_id, scheduled_at }) => ({ workout_id, scheduled_at }))
-    const calendarMeta = calendarEventStore.events.map(({ workoutId, start }) => ({ workoutId, start }))
+  const sessionMeta = computed(() => {
+    return workoutSessionStore.workoutSessions.map(({ workout_id, scheduled_at }) => ({ workout_id, scheduled_at }))
+  })
 
-    sessionExists.value = calendarMeta.map(calendar => {
-      return sessionMeta.some(session => {
+  const calendarMeta = computed(() => {
+    return calendarEventStore.events.map(({ workoutId, start }) => ({ workoutId, start }))
+  })
+
+  const checkIfSessionExists = async () => {
+    sessionExists.value = calendarMeta.value.map(calendar => {
+      return sessionMeta.value.some(session => {
         return session.workout_id === calendar.workoutId && new Date(session.scheduled_at).toISOString() === calendar.start
       })
     })
-})
+  }
+
+
+  onMounted(async () => {
+    await checkIfSessionExists()
+  })
 </script>
 
 <template>
