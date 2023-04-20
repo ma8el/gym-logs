@@ -1,3 +1,11 @@
+<script setup lang="ts">
+  watchEffect(() => {
+    if (useSupabaseUser().value) {
+      navigateTo('/')
+    }
+  })
+</script>
+
 <template>
     <div class="container">
       <div class="logo-container">

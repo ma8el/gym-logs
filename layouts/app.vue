@@ -21,10 +21,10 @@
   
   loading.value = false
 
-  async function signOut() {
+  function signOut() {
     try {
       loading.value = true
-      let { error } = await supabase.auth.signOut()
+      let { error } = supabase.auth.signOut()
       if (error) throw error
     } catch (error) {
       alert(error.message)
@@ -32,6 +32,12 @@
       loading.value = false
     }
   }
+
+  watchEffect(() => {
+    if (!useSupabaseUser().value) {
+      navigateTo('/login')
+    }
+  })
 </script>
 
 <template>
