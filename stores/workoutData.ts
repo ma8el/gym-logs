@@ -262,6 +262,18 @@ export const useWorkoutSessionStore = defineStore('workoutSession', {
         }
       },
 
+      async fetchGroupedWorkoutSessionPerformanceData() {
+        const supabase = useSupabaseClient()
+        const { data, error } = await supabase
+          .from('v_grouped_workout_session_performance')
+          .select('*')
+        if(error) {
+          console.log(error)
+        } else {
+          return data
+        }
+      },
+
       async insertWorkoutSessionData(startedAt: string) {
         const userStore = useUserStore()
         const supabase = useSupabaseClient()
