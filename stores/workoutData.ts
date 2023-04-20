@@ -166,6 +166,7 @@ export const useCalendarEventStore = defineStore('calendarEvent', {
         const { data, error } = await supabase
           .from('v_scheduled_workouts')
           .select(`*`)
+          .eq('user_id', useUserStore().user)
         if (error) {
           console.log(error)
         } else {
@@ -231,6 +232,7 @@ export const useWorkoutSessionStore = defineStore('workoutSession', {
           .select('*')
           .eq('workout_id', `${workoutId}`)
           .eq('date', startsAt)
+          .eq('user_id', useUserStore().user)
         if (error) {
           console.log(error)
         } else {
@@ -267,9 +269,11 @@ export const useWorkoutSessionStore = defineStore('workoutSession', {
         const { data, error } = await supabase
           .from('v_grouped_workout_session_performance')
           .select('*')
+          .eq('user_id', useUserStore().user)
         if(error) {
           console.log(error)
         } else {
+          console.log(useUserStore().user)
           return data
         }
       },
