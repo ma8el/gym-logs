@@ -273,7 +273,6 @@ export const useWorkoutSessionStore = defineStore('workoutSession', {
         if(error) {
           console.log(error)
         } else {
-          console.log(useUserStore().user)
           return data
         }
       },
